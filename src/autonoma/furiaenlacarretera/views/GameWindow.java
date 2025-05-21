@@ -7,11 +7,14 @@ package autonoma.furiaenlacarretera.views;
 import autonoma.furiaenlacarretera.elements.GameField;
 import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import gamebase.elements.GraphicContainer;
+import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import static java.awt.image.ImageObserver.HEIGHT;
+import static java.awt.image.ImageObserver.WIDTH;
 
 /**
  *
@@ -31,8 +34,20 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
      * Creates new form GameWindow
      */
     public GameWindow(GameField g) {
+        gameField = g;
         setUndecorated(true);
         initComponents();
+        
+
+        this.setLocationRelativeTo(null);
+
+        this.setSize(_WIDTH, _HEIGHT);
+
+        // Crear la imagen y cargarla en memoria
+        this.imagenBuffer = new BufferedImage(_WIDTH, _HEIGHT,
+                BufferedImage.TYPE_INT_RGB);
+
+        this.gImagenBuffer = this.imagenBuffer.getGraphics();
     }
 
     /**
@@ -71,11 +86,35 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         }
     }//GEN-LAST:event_formKeyPressed
 
+
+    @Override
+    public void update(Graphics g) {
+        // Pintar el FoodField encima del fondo
+        if (gameField != null) {
+            gameField.paint(gImagenBuffer);
+//            if (gameField.getPlayer() != null) {
+//                gImagenBuffer.setColor(Color.YELLOW);
+//                gImagenBuffer.drawString("Puntaje: " + gameField.getPlayer().getPuntaje(), 20, 50);
+//            }
+        }
+
+        //dibuja la imagen completa en pantalla
+        g.drawImage(imagenBuffer, 0, 0, this);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        update(g);
+    }
+
     @Override
     public Rectangle getBordes() {
         return new Rectangle(WIDTH, HEIGHT);
     }
 
+    /**
+     * Refresca la interfaz gráfica de la ventana del juego.
+     */
     @Override
     public void refresh() {
         this.repaint();

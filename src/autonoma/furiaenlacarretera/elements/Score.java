@@ -15,7 +15,7 @@ import java.util.Collections;
  *
  * @author Camila Prada
  * @version 1.0.0
- * @since 2025-05-02
+ * @since 2025-05-20
  */
 public class Score {
     /**

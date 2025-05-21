@@ -5,20 +5,21 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
- *
- * @author Kamii
+ * @author Maria Camila Prada Cortes
+ * @version 1.0.0
+ * @since 2025-05-20
  */
 public class Cone extends ElementType {
 
-    public static final int WIDTH_ZOMBIE = 48;
-    public static final int HEIGH_ZOMBIE = 80;
+    public static final int WIDTH_CONE = 48;
+    public static final int HEIGH_CONE = 80;
 
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
     private int paso;
 
-    public Cone(int x, int y, int height, int width, GraphicContainer g) {
-        super(x, y, height, width);
+    public Cone(int x, int y, int width, int height, GraphicContainer g) {
+        super(x, y, width, height);
         setImage("cono.png");
 
         gameContainer = g;
@@ -29,8 +30,8 @@ public class Cone extends ElementType {
         }
 
         //creamos la imagen en memoria
-        imagenBuffer = new BufferedImage(WIDTH_ZOMBIE,
-                HEIGH_ZOMBIE,
+        imagenBuffer = new BufferedImage(WIDTH_CONE ,
+                HEIGH_CONE,
                 BufferedImage.TYPE_INT_RGB
         );
         //obtenemos los graficos
@@ -41,6 +42,20 @@ public class Cone extends ElementType {
     public void update(Graphics g) {
         g.drawImage(imagenBuffer, 0, 0, this);
         //paint(g);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        System.out.println("Paint cono");
+        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
+    }
+
+    public int getPaso() {
+        return paso;
+    }
+
+    public void setPaso(int paso) {
+        this.paso = paso;
     }
 
     @Override
@@ -82,11 +97,6 @@ public class Cone extends ElementType {
 
         return false;
 
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
     @Override

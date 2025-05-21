@@ -5,21 +5,22 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
- *
- * @author Kamii
+ * @author Maria Camila Prada Cortes
+ * @version 1.0.0
+ * @since 2025-05-20
  */
 public class Person extends ElementType {
 
-    public static final int WIDTH_ZOMBIE = 48;
-    public static final int HEIGH_ZOMBIE = 80;
+    public static final int WIDTH_PERSON = 48;
+    public static final int HEIGH_PERSON = 80;
 
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
     private int paso;
 
-    public Person(int x, int y, int height, int width, GraphicContainer g) {
-        super(x, y, height, width);
-        setImage("carroDeEspaldas.png");
+    public Person(int x, int y, int width, int height, GraphicContainer g) {
+        super(x, y, width, height);
+        setImage("person.png");
 
         gameContainer = g;
         paso = (int) ((Math.random() * 10) + 5);
@@ -29,8 +30,8 @@ public class Person extends ElementType {
         }
 
         //creamos la imagen en memoria
-        imagenBuffer = new BufferedImage(WIDTH_ZOMBIE,
-                HEIGH_ZOMBIE,
+        imagenBuffer = new BufferedImage(WIDTH_PERSON,
+                HEIGH_PERSON,
                 BufferedImage.TYPE_INT_RGB
         );
         //obtenemos los graficos
@@ -41,6 +42,21 @@ public class Person extends ElementType {
     public void update(Graphics g) {
         g.drawImage(imagenBuffer, 0, 0, this);
         //paint(g);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        System.out.println("Paint carro");
+        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
+
+    }
+
+    public int getPaso() {
+        return paso;
+    }
+
+    public void setPaso(int paso) {
+        this.paso = paso;
     }
 
     @Override
@@ -82,11 +98,6 @@ public class Person extends ElementType {
 
         return false;
 
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
     @Override

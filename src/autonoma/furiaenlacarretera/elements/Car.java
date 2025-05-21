@@ -6,19 +6,21 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author Kamii
+ * @author Maria Camila Prada Cortes
+ * @version 1.0.0
+ * @since 2025-05-20
  */
 public class Car extends ElementType {
 
-    public static final int WIDTH_ZOMBIE = 48;
-    public static final int HEIGH_ZOMBIE = 80;
+    public static final int WIDTH_CAR = 48;
+    public static final int HEIGH_CAR = 80;
 
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
     private int paso;
 
-    public Car(int x, int y, int height, int width, GraphicContainer g) {
-        super(x, y, height, width);
+    public Car(int x, int y, int width, int height, GraphicContainer g) {
+        super(x, y, width, height);
         setImage("carroDeEspaldas.png");
 
         gameContainer = g;
@@ -29,8 +31,8 @@ public class Car extends ElementType {
         }
 
         //creamos la imagen en memoria
-        imagenBuffer = new BufferedImage(WIDTH_ZOMBIE,
-                HEIGH_ZOMBIE,
+        imagenBuffer = new BufferedImage(WIDTH_CAR,
+                HEIGH_CAR,
                 BufferedImage.TYPE_INT_RGB
         );
         //obtenemos los graficos
@@ -41,6 +43,20 @@ public class Car extends ElementType {
     public void update(Graphics g) {
         g.drawImage(imagenBuffer, 0, 0, this);
         //paint(g);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        System.out.println("Paint carro");
+        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
+
+    }
+    public int getPaso() {
+        return paso;
+    }
+
+    public void setPaso(int paso) {
+        this.paso = paso;
     }
 
     @Override
@@ -72,7 +88,7 @@ public class Car extends ElementType {
         if (!fueraContenedor(nx, ny)) {
             x = nx;
             y = ny;
-            //System.out.println("Me movi");
+            System.out.println("Me movi");
             if (gameContainer != null) {
                 gameContainer.refresh();
             }
@@ -84,10 +100,7 @@ public class Car extends ElementType {
 
     }
 
-    @Override
-    public void paint(Graphics g) {
-        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
-    }
+  
 
     @Override
     public void run() {

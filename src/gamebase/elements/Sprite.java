@@ -77,7 +77,7 @@ public abstract class Sprite extends Canvas {
 
     public BufferedImage setImage(String filename) {
         try {
-            setImage(ImageIO.read(getClass().getResourceAsStream("/autonoma/lluviahamburguesa/images/" + filename)));
+            setImage(ImageIO.read(getClass().getResourceAsStream("/autonoma/furiaenlacarretera/images/" + filename)));
 
             return getImage();
         } catch (IOException e) {

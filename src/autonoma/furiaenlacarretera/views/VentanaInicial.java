@@ -1,6 +1,7 @@
 package autonoma.furiaenlacarretera.views;
 
 import autonoma.furiaenlacarretera.elements.GameField;
+import autonoma.furiaenlacarretera.elements.RefreshProgram;
 import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
@@ -145,16 +146,19 @@ public class VentanaInicial extends JFrame {
         ReproducirSonido.detener();
         this.dispose();
         GameField gameField = new GameField(0, 0, 500, 500);
+ 
 
         //Player player = new Player(armaInicial, 100, 100, 50, 50);
-        //battlefield.setPlayer(player);
+        //gameField.setPlayer(player);
         GameWindow window = new GameWindow(gameField);
-        //battlefield.setGraphicContainer(window);
+        gameField.setGraphicContainer(window);
 
         window.setSize(500, 500);
         window.setTitle("Furia en la carretera");
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        RefreshProgram gameLoop = new RefreshProgram(gameField, window);
+        gameLoop.start();
 
         this.dispose();
     }

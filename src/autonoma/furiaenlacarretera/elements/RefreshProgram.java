@@ -8,11 +8,13 @@ import autonoma.furiaenlacarretera.views.GameWindow;
  * @version 1.0.0
  * @since 2025-05-20
  */
-public class RefreshProgram implements Runnable{
-private GameField gameField;
+public class RefreshProgram implements Runnable {
+
+    private GameField gameField;
     private GameWindow gameWindow;
     private boolean running;
     private Thread thread;
+
     /**
      * Constructor
      */
@@ -25,12 +27,41 @@ private GameField gameField;
     @Override
     public void run() {
         running = true;
+        int carSpawnTimer = 0;
+        int coneSpawnTimer = 0;
+        int personSpawnTimer = 0;
+        int currencySpawnTimer = 0;
+
         while (running) {
-            //gameField.update();  // mueve los elementos y refresca
+            gameField.update();
+
+            carSpawnTimer += 30;
+            coneSpawnTimer += 30;
+            personSpawnTimer += 30;
+            currencySpawnTimer += 30;
+
+            if (carSpawnTimer >= 1000) {  // cada 1 segundo
+                gameField.addCar();
+                carSpawnTimer = 0;
+            }
+
+            if (coneSpawnTimer >= 2000) {  // cada 2 segundos
+                gameField.addCone();
+                coneSpawnTimer = 0;
+            }
+            if (personSpawnTimer >= 5000) {  // cada 5 segundos
+                gameField.addPerson();
+                personSpawnTimer = 0;
+            }
+            if (currencySpawnTimer >= 3000) {  // cada 3 segundos
+                gameField.addCurrency();
+                currencySpawnTimer = 0;
+            }
+
             try {
-                Thread.sleep(30);  // 30ms como lo planeabas
+                Thread.sleep(30);
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                // manejar excepción si quieres
             }
         }
     }
@@ -43,5 +74,5 @@ private GameField gameField;
     public void stop() {
         running = false;
     }
-        
+
 }

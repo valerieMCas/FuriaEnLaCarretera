@@ -20,7 +20,7 @@ public abstract class ElementType extends SpriteMobile {
     public static final int HEIGHT = 30;
 
     public ElementType(int x, int y, int width, int height) {
-        super(x, y, height, width);
+        super(x, y, width, height);
         setStep(step);
     }
 
@@ -29,7 +29,7 @@ public abstract class ElementType extends SpriteMobile {
                 && punto.y >= this.getY() && punto.y <= this.getY() + this.getHeight();
     }
 
-    public static ElementType create(Class type, int width, int height, List<Sprite> sprites)
+    public static ElementType create(Class type, int width, int height, List<Sprite> sprites, GraphicContainer gc)
             throws InstantiationException, IllegalAccessException {
         int x, y;
         boolean overlaps;
@@ -55,19 +55,19 @@ public abstract class ElementType extends SpriteMobile {
         ElementType e = null;
 
         if (type.equals(Car.class)) {
-            e = new Car(x, y, ElementType.WIDTH, ElementType.HEIGHT, null);
+            e = new Car(x, y, ElementType.WIDTH, ElementType.HEIGHT, gc);
 
         } else if (type.equals(Person.class)) {
-            e = new Person(x, y, ElementType.WIDTH, ElementType.HEIGHT, null);
+            e = new Person(x, y, ElementType.WIDTH, ElementType.HEIGHT, gc);
 
         } else if (type.equals(Cone.class)) {
-            e = new Cone(x, y, ElementType.WIDTH, ElementType.HEIGHT, null);
+            e = new Cone(x, y, ElementType.WIDTH, ElementType.HEIGHT, gc);
 
         } else if (type.equals(Currency.class)) {
-            e = new Currency(x, y, ElementType.WIDTH, ElementType.HEIGHT, null);
+            e = new Currency(x, y, ElementType.WIDTH, ElementType.HEIGHT, gc);
 
         } else {
-            System.out.println("ERROR: ElementType.create unknown type of flea");
+            System.out.println("ERROR: ElementType.create unknown type of elements");
         }
 
         return e;
