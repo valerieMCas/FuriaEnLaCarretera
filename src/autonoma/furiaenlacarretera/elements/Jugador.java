@@ -41,7 +41,7 @@ public class Jugador extends Sprite{
      */
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
-
+    private static final int STEP = 5;
     /**
      * constructor
      */
@@ -58,10 +58,9 @@ public class Jugador extends Sprite{
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
     
-
     @Override
     public void paint(Graphics g) {
-        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(getImage(), x, y, width, height, null);
     }
     
     public void aumentarPuntaje(int score ){
@@ -74,7 +73,6 @@ public class Jugador extends Sprite{
         this.moto.recargarCombustible(cantindad);
     }
     public void mover(KeyEvent e) {
-        int STEP = 10; // Distancia que se mueve el jugador
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
@@ -94,6 +92,7 @@ public class Jugador extends Sprite{
                 break;
         }
     }
+
 
 
 }

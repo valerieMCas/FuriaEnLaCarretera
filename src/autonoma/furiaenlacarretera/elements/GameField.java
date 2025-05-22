@@ -29,13 +29,17 @@ public class GameField extends SpriteContainer {
     private EscritorArchivoTextoPlano escritor;
     private LectorArchivoTextoPlano lector;
     private Jugador jugador;
+    private int offsetX = 0; // desplazamiento horizontal del fondo
+    private int offsetY = 0; // desplazamiento vertical si lo necesitas
+    private static final int movimineto = 5;
+
     
 
     private int maxScore = 0;
 
     public GameField(int x, int y, int height, int width) {
         super(x, y, height, width);
-        setImage("fondoPrincipal.png");
+        setImage("mapa.jpeg");
     }
 
     /**
@@ -47,7 +51,7 @@ public class GameField extends SpriteContainer {
     public List<Sprite> getSprites() {
         return sprites;
     }
-
+    
     /**
      * Metodo para agregar el carro a la pista
      */
@@ -71,6 +75,14 @@ public class GameField extends SpriteContainer {
 
         this.sprites.add(person);
     }
+    public void addJugador() {
+        int startX = width / 2 - 25;  // centrado horizontalmente, restando la mitad del ancho del jugador
+        int startY = height - 100;    // cerca de la parte inferior
+
+        this.jugador = new Jugador(startX, startY, 50, 40);
+        this.sprites.add(jugador);
+    }
+
 
     /**
      * Metodo para agregar el cono a la pista
@@ -115,6 +127,19 @@ public class GameField extends SpriteContainer {
                 }
             }
         }
+        int margenSuperior = (int)(height * 0.1);
+        int margenInferior = (int)(height * 0.7);
+
+        if (jugador.getY() < margenSuperior && offsetY > 0) {
+            offsetY -= movimineto;
+            jugador.setY(margenSuperior);
+        }
+        else if (jugador.getY() > margenInferior && offsetY + height < getImage().getHeight(null)) {
+            offsetY += movimineto;
+            jugador.setY(margenInferior);
+        }
+
+
 
 //        // 2. Actualizar posición del jugador si se está moviendo entre carriles
 //        // (Asumiendo que tienes lógica para mover el jugador horizontalmente)
@@ -145,7 +170,9 @@ public class GameField extends SpriteContainer {
 
     @Override
     public void paint(Graphics g) {
-        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
+        
+        g.drawImage(getImage(), 0, -offsetY, getImage().getWidth(null), getImage().getHeight(null), null);
+
         // Copiar la lista para evitar problemas de concurrencia
         List<Sprite> copiaSprites = new ArrayList<>(sprites);
 

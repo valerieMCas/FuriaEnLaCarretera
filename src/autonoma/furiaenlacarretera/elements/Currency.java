@@ -48,9 +48,7 @@ public class Currency extends ElementType {
 
     @Override
     public void paint(Graphics g) {
-        System.out.println("Paint carro");
         g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
-
     }
 
     public int getPaso() {

@@ -146,7 +146,7 @@ public class VentanaInicial extends JFrame {
         ReproducirSonido.detener();
         this.dispose();
         GameField gameField = new GameField(0, 0, 500, 500);
- 
+        gameField.addJugador();
 
         //Player player = new Player(armaInicial, 100, 100, 50, 50);
         //gameField.setPlayer(player);

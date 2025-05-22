@@ -146,7 +146,7 @@ public abstract class Sprite extends Canvas {
         return collisionX && collisionY;
     }
 
-    public abstract void paint(Graphics g);
+    public abstract void paint( Graphics g);
 
     public GraphicContainer getContenedor() {
         return gameContainer;
