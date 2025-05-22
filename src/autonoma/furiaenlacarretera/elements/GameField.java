@@ -1,5 +1,6 @@
 package autonoma.furiaenlacarretera.elements;
 
+import autonoma.furiaenlacarretera.elements.Cone;
 import gamebase.elements.EscritorArchivoTextoPlano;
 import gamebase.elements.LectorArchivoTextoPlano;
 import gamebase.elements.Sprite;
@@ -53,6 +54,14 @@ public class GameField extends SpriteContainer {
     public List<Sprite> getSprites() {
         return sprites;
     }
+    private boolean hayColision(Rectangle nuevoRect) {
+    for (Sprite sprite : sprites) {
+        if (sprite.getBoundaries().intersects(nuevoRect)) {
+            return true;
+        }
+    }
+    return false;
+}
     
     /**
      * Metodo para agregar el carro a la pista
@@ -65,12 +74,21 @@ public class GameField extends SpriteContainer {
      * Metodo para agregar la persona a la pista
      */
     public void addPerson() {
-        int xt = (int) (Math.random() * (width - Cone.WIDTH_CONE));
-        int yt = (int) (Math.random() * (height - Cone.HEIGH_CONE));
+        int intentos = 0;
+        int maxIntentos = 50;
 
-        Person person = new Person(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
+        while (intentos < maxIntentos) {
+            int xt = (int) (Math.random() * (width - Cone.WIDTH_CONE));
+            int yt = (int) (Math.random() * (height - Cone.HEIGH_CONE));
 
-        this.sprites.add(person);
+            Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
+            if (!hayColision(nuevoRect)) {
+                Person person = new Person(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
+                this.sprites.add(person);
+                break;
+            }
+            intentos++;
+        }
     }
     public void addJugador() {
         int startX = width / 2 - 25;  // centrado horizontalmente, restando la mitad del ancho del jugador
@@ -85,24 +103,44 @@ public class GameField extends SpriteContainer {
      * Metodo para agregar el cono a la pista
      */
     public void addCone() {
-        int xt = (int) (Math.random() * (width - Cone.WIDTH_CONE));
-        int yt = (int) (Math.random() * (height - Cone.HEIGH_CONE));
+        
+        int intentos = 0;
+        int maxIntentos = 50;
 
-        Cone cone = new Cone(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
+        while (intentos < maxIntentos) {
+            int xt = (int) (Math.random() * (width - Cone.WIDTH_CONE));
+            int yt = (int) (Math.random() * (height - Cone.HEIGH_CONE));
 
-        add(cone);
+            Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
+            if (!hayColision(nuevoRect)) {
+                Cone cone = new Cone(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
+                add(cone);
+                break;
+            }
+            intentos++;
+        }
     }
+    
 
     /**
      * Metodo para agregar el carro a la pista
      */
     public void addCurrency() {
-        int xt = (int) (Math.random() * (width - Currency.WIDTH_CURRENCY));
-        int yt = (int) (Math.random() * (height - Currency.HEIGH_CURRENCY));
+        int intentos = 0;
+        int maxIntentos = 50;
 
-        Currency currency = new Currency(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
+        while (intentos < maxIntentos) {
+            int xt = (int) (Math.random() * (width - Currency.WIDTH_CURRENCY));
+            int yt = (int) (Math.random() * (height - Currency.HEIGH_CURRENCY));
 
-        add(currency);
+            Rectangle nuevoRect = new Rectangle(xt, yt, Currency.WIDTH_CURRENCY, Currency.HEIGH_CURRENCY);
+            if (!hayColision(nuevoRect)) {
+                Currency currency = new Currency(xt, yt, Currency.WIDTH_CURRENCY, Currency.HEIGH_CURRENCY, this);
+                add(currency);
+                break;
+            }
+            intentos++;
+        }
     }
 
     public void eliminarElement(ElementType element) {

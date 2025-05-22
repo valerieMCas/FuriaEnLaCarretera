@@ -1,9 +1,14 @@
 package autonoma.furiaenlacarretera.elements;
 
+import static autonoma.furiaenlacarretera.elements.Cone.HEIGH_CONE;
+import static autonoma.furiaenlacarretera.elements.Cone.WIDTH_CONE;
 import gamebase.elements.GraphicContainer;
+import gamebase.elements.Sprite;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 import javax.swing.ImageIcon;
 
 /**
@@ -39,7 +44,50 @@ public class Currency extends ElementType {
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
+    public void registerHitGameField(GameField gameField) {
+        if (gameField != null) {
+            gameField.getSprites().add(this);
+        }
+    }
+    public static void create(GameField gameField, GraphicContainer container, Random rand) {
+        int intentosMaximos = 100;
+        int intentos = 0;
+        boolean seSobrepone = true;
 
+        int x = 0;
+        int y = 0;
+
+        while (intentos < intentosMaximos && seSobrepone) {
+            x = rand.nextInt(container.getBordes().width - WIDTH_CONE);
+            y = rand.nextInt(container.getBordes().height - HEIGH_CONE);
+
+            Rectangle nuevo = new Rectangle(x, y, WIDTH_CONE, HEIGH_CONE);
+            seSobrepone = false;
+
+            for (Sprite elemento : gameField.getSprites()) {
+                Rectangle existente = new Rectangle(
+                    elemento.getX(),
+                    elemento.getY(),
+                    elemento.getWidth(),
+                    elemento.getHeight()
+                );
+
+                if (nuevo.intersects(existente)) {
+                    seSobrepone = true;
+                    break;
+                }
+            }
+
+            intentos++;
+        }
+
+        if (!seSobrepone) {
+            Cone cono = new Cone(x, y, WIDTH_CONE, HEIGH_CONE, container);
+            cono.registerHitGameField(gameField);
+        } else {
+            System.out.println("No se pudo colocar el cono sin superposición tras " + intentosMaximos + " intentos.");
+        }
+    }
     @Override
     public void update(Graphics g) {
         g.drawImage(imagenBuffer, 0, 0, this);
