@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,12 +53,7 @@ public class GameField extends SpriteContainer {
      * Metodo para agregar el carro a la pista
      */
     public void addCar() {
-        int xt = (int) (Math.random() * (width - Car.WIDTH_CAR));
-        int yt = (int) (Math.random() * (height - Car.HEIGH_CAR));
-
-        Car car = new Car(xt, yt, Car.WIDTH_CAR, Car.HEIGH_CAR, this);
-
-        add(car);
+        Car.create(this, this, new Random());
     }
 
     /**
