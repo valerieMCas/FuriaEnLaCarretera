@@ -27,13 +27,13 @@ public class GameField extends SpriteContainer {
     //String[] options = {"Sí", "No"};
     private EscritorArchivoTextoPlano escritor;
     private LectorArchivoTextoPlano lector;
-    private Car car;
+    private boolean iniciado;
 
     private int maxScore = 0;
 
     public GameField(int x, int y, int height, int width) {
         super(x, y, height, width);
-
+        this.iniciado=false;
         setImage("fondoPrincipal.png");
     }
 
@@ -68,7 +68,7 @@ public class GameField extends SpriteContainer {
 
         Person person = new Person(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
 
-        add(person);
+        this.sprites.add(person);
     }
 
     /**
@@ -156,6 +156,7 @@ public class GameField extends SpriteContainer {
 
         //jugador.paint(g);
     }
+    
 
     @Override
     public Rectangle getBordes() {
