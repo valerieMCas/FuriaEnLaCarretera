@@ -1,8 +1,11 @@
 package autonoma.furiaenlacarretera.elements;
 
 import gamebase.elements.GraphicContainer;
+import gamebase.elements.Sprite;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  *
@@ -38,7 +41,52 @@ public class Car extends ElementType {
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
+    public void registerHitGameField(GameField gameField) {
+        if (gameField != null) {
+            gameField.getSprites().add(this);
+        }
+    }
 
+    // Método para evitar superposición y crear el carro
+    public static void create(GameField gameField, GraphicContainer container, Random rand) {
+        int intentosMaximos = 100;
+        int intentos = 0;
+        boolean seSobrepone = true;
+
+        int x = 0;
+        int y = 0;
+
+        while (intentos < intentosMaximos && seSobrepone) {
+            x = rand.nextInt(container.getBordes().width - WIDTH_CAR);
+            y = rand.nextInt(container.getBordes().height - HEIGH_CAR);
+
+            Rectangle nuevo = new Rectangle(x, y, WIDTH_CAR, HEIGH_CAR);
+            seSobrepone = false;
+
+            for (Sprite elemento : gameField.getSprites()) {
+                Rectangle existente = new Rectangle(
+                    elemento.getX(),
+                    elemento.getY(),
+                    elemento.getWidth(),
+                    elemento.getHeight()
+                );
+
+                if (nuevo.intersects(existente)) {
+                    seSobrepone = true;
+                    break;
+                }
+            }
+
+            intentos++;
+        }
+
+        if (!seSobrepone) {
+            Car carro = new Car(x, y, WIDTH_CAR, HEIGH_CAR, container);
+            carro.registerHitGameField(gameField);
+        } else {
+            System.out.println("No se pudo colocar el carro sin superposición tras " + intentosMaximos + " intentos.");
+        }
+    }
     @Override
     public void update(Graphics g) {
         g.drawImage(imagenBuffer, 0, 0, this);
@@ -126,6 +174,8 @@ public class Car extends ElementType {
 
     @Override
     public void delete(GameField gameField) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (gameField != null) {
+            gameField.getSprites().remove(this);
+        }
     }
 }
