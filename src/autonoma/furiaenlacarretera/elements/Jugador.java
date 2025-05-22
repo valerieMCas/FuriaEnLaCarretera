@@ -9,6 +9,7 @@ import static autonoma.furiaenlacarretera.elements.Car.WIDTH_CAR;
 import gamebase.elements.GraphicContainer;
 import gamebase.elements.Sprite;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 /**
@@ -22,6 +23,9 @@ public class Jugador extends Sprite{
      * Atributos
      * 
      */
+    /**
+     * atributos de tamaño 
+     */
     public static final int WIDTH_JUGADOR = 50;
     public static final int HEIGH_JUGADOR = 50;
     /**
@@ -29,9 +33,12 @@ public class Jugador extends Sprite{
      */
     private int puntaje;
     /**
-     * atributo de fuel
+     * atributo de instancia de moto
      */
-    private int fuel;
+    private Moto moto; 
+    /**
+     * atributos de imagen
+     */
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
 
@@ -42,7 +49,6 @@ public class Jugador extends Sprite{
     public Jugador(int x, int y, int width, int height) {
         super(x, y, height, width);
         this.puntaje = 0;
-        this.fuel = 100;
         setImage("chicaMoto.png");
         imagenBuffer = new BufferedImage(WIDTH_JUGADOR,
                 HEIGH_JUGADOR,
@@ -55,13 +61,39 @@ public class Jugador extends Sprite{
 
     @Override
     public void paint(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
+    
     public void aumentarPuntaje(int score ){
         this.puntaje +=score;
     }
     public void consumirConbustible(){
-        
+        this.moto.disminuirCombustible();
     }
-    
+    public void recargarConbustible(int cantindad){
+        this.moto.recargarCombustible(cantindad);
+    }
+    public void mover(KeyEvent e) {
+        int STEP = 10; // Distancia que se mueve el jugador
+
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                setY(getY() - STEP);
+                break;
+
+            case KeyEvent.VK_DOWN:
+                setY(getY() + STEP);
+                break;
+
+            case KeyEvent.VK_LEFT:
+                setX(getX() - STEP);
+                break;
+
+            case KeyEvent.VK_RIGHT:
+                setX(getX() + STEP);
+                break;
+        }
+    }
+
+
 }

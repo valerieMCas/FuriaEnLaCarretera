@@ -25,6 +25,7 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
     public static final int _WIDTH = 850;
     public static final int _HEIGHT = 550;
     private GameField gameField;
+    
 
     // Double Buffer
     private BufferedImage imagenBuffer;
@@ -81,9 +82,14 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_Q) {
+        int code = evt.getKeyCode();
+        if (code == KeyEvent.VK_Q) {
             System.exit(0);
+        } else if (code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN ||
+                   code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
+            gameField.keyPressed(evt);
         }
+
     }//GEN-LAST:event_formKeyPressed
 
 

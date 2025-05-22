@@ -9,12 +9,23 @@ package autonoma.furiaenlacarretera.elements;
  * @since 21/5/2025
  * @version 1.0.0
  */
-public class Motor {
+public class Moto {
+    /**
+     * atributos
+     */
+    /**
+     * atributo de fuel
+     */
     private int fuel;
-
-    public Motor() {
+    /**
+     * constructor
+     */
+    public Moto() {
         this.fuel = 100;
     }
+    /**
+     * metodo de disminuir comburtible
+     */
     public void disminuirCombustible() {
         try {
             Thread.sleep(5000); 
@@ -26,6 +37,9 @@ public class Motor {
         } catch (InterruptedException e) {
         }
     }
+    /**
+     * metodo de recargar comburtible
+     */
     public void recargarCombustible(int cantidad){
         if (cantidad ==15){
             this.fuel=100;

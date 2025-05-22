@@ -6,6 +6,7 @@ import gamebase.elements.Sprite;
 import gamebase.elements.SpriteContainer;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,13 +28,13 @@ public class GameField extends SpriteContainer {
     //String[] options = {"Sí", "No"};
     private EscritorArchivoTextoPlano escritor;
     private LectorArchivoTextoPlano lector;
-    private boolean iniciado;
+    private Jugador jugador;
+    
 
     private int maxScore = 0;
 
     public GameField(int x, int y, int height, int width) {
         super(x, y, height, width);
-        this.iniciado=false;
         setImage("fondoPrincipal.png");
     }
 
@@ -156,7 +157,13 @@ public class GameField extends SpriteContainer {
 
         //jugador.paint(g);
     }
-    
+    public void keyPressed(KeyEvent e) {
+        if (jugador != null) {
+            jugador.mover(e);
+            refresh(); // o repaint()
+        }
+    }
+
 
     @Override
     public Rectangle getBordes() {
