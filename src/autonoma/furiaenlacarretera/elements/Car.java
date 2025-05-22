@@ -9,7 +9,7 @@ import java.util.Random;
 
 /**
  *
- * @author Maria Camila Prada Cortes
+ * @author Martin
  * @version 1.0.0
  * @since 2025-05-20
  */

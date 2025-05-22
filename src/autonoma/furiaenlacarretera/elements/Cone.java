@@ -1,8 +1,11 @@
 package autonoma.furiaenlacarretera.elements;
 
 import gamebase.elements.GraphicContainer;
+import gamebase.elements.Sprite;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  * @author Maria Camila Prada Cortes
@@ -36,6 +39,50 @@ public class Cone extends ElementType {
         );
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
+    }
+    public void registerHitGameField(GameField gameField) {
+        if (gameField != null) {
+            gameField.getSprites().add(this);
+        }
+    }
+    public static void create(GameField gameField, GraphicContainer container, Random rand) {
+        int intentosMaximos = 100;
+        int intentos = 0;
+        boolean seSobrepone = true;
+
+        int x = 0;
+        int y = 0;
+
+        while (intentos < intentosMaximos && seSobrepone) {
+            x = rand.nextInt(container.getBordes().width - WIDTH_CONE);
+            y = rand.nextInt(container.getBordes().height - HEIGH_CONE);
+
+            Rectangle nuevo = new Rectangle(x, y, WIDTH_CONE, HEIGH_CONE);
+            seSobrepone = false;
+
+            for (Sprite elemento : gameField.getSprites()) {
+                Rectangle existente = new Rectangle(
+                    elemento.getX(),
+                    elemento.getY(),
+                    elemento.getWidth(),
+                    elemento.getHeight()
+                );
+
+                if (nuevo.intersects(existente)) {
+                    seSobrepone = true;
+                    break;
+                }
+            }
+
+            intentos++;
+        }
+
+        if (!seSobrepone) {
+            Cone cono = new Cone(x, y, WIDTH_CONE, HEIGH_CONE, container);
+            cono.registerHitGameField(gameField);
+        } else {
+            System.out.println("No se pudo colocar el cono sin superposición tras " + intentosMaximos + " intentos.");
+        }
     }
 
     @Override
@@ -123,6 +170,8 @@ public class Cone extends ElementType {
 
     @Override
     public void delete(GameField gameField) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (gameField != null) {
+            gameField.getSprites().remove(this);
+        }
     }
 }
