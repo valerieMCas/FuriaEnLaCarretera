@@ -5,6 +5,7 @@ import gamebase.elements.LectorArchivoTextoPlano;
 import gamebase.elements.Sprite;
 import gamebase.elements.SpriteContainer;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class GameField extends SpriteContainer {
     private EscritorArchivoTextoPlano escritor;
     private LectorArchivoTextoPlano lector;
     private Jugador jugador;
-    private int offsetX = 0; // desplazamiento horizontal del fondo
-    private int offsetY = 0; // desplazamiento vertical si lo necesitas
+    private int offsetX = 0; 
+    private int offsetY = 0;
     private static final int movimineto = 5;
 
     
@@ -123,16 +124,10 @@ public class GameField extends SpriteContainer {
                 }
             }
         }
-        int margenSuperior = (int)(height * 0.1);
-        int margenInferior = (int)(height * 0.7);
-
-        if (jugador.getY() < margenSuperior && offsetY > 0) {
-            offsetY -= movimineto;
-            jugador.setY(margenSuperior);
-        }
-        else if (jugador.getY() > margenInferior && offsetY + height < getImage().getHeight(null)) {
-            offsetY += movimineto;
-            jugador.setY(margenInferior);
+      // Movimiento automático del fondo
+        offsetY -= movimineto;
+        if (offsetY <= 0) {
+            offsetY = getImage().getHeight(null);
         }
 
 
@@ -166,8 +161,16 @@ public class GameField extends SpriteContainer {
 
     @Override
     public void paint(Graphics g) {
-        
-        g.drawImage(getImage(), 0, -offsetY, getImage().getWidth(null), getImage().getHeight(null), null);
+        Image fondo = getImage();
+        int fondoAlto = fondo.getHeight(null);
+
+        // Calcula la posición vertical del fondo para hacer scroll infinito
+        int y1 = -offsetY % fondoAlto;
+
+        // Dibuja dos veces la imagen para rellenar todo el panel
+        g.drawImage(fondo, 0, y1, getWidth(), fondoAlto, null);
+        g.drawImage(fondo, 0, y1 + fondoAlto, getWidth(), fondoAlto, null);
+
 
         // Copiar la lista para evitar problemas de concurrencia
         List<Sprite> copiaSprites = new ArrayList<>(sprites);
@@ -177,7 +180,6 @@ public class GameField extends SpriteContainer {
                 sprite.paint(g);
             }
         }
-
         //jugador.paint(g);
     }
     public void keyPressed(KeyEvent e) {
