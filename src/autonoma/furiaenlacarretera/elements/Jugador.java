@@ -73,7 +73,6 @@ public class Jugador extends Sprite{
         this.moto.recargarCombustible(cantindad);
     }
     public void mover(KeyEvent e) {
-
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 setY(getY() - STEP);
@@ -84,14 +83,19 @@ public class Jugador extends Sprite{
                 break;
 
             case KeyEvent.VK_LEFT:
-                setX(getX() - STEP);
+                if (getX() - STEP >= 165) {
+                    setX(getX() - STEP);
+                }
                 break;
 
             case KeyEvent.VK_RIGHT:
-                setX(getX() + STEP);
+                if (getX() + width + STEP <= 360) {
+                    setX(getX() + STEP);
+                }
                 break;
         }
     }
+
 
 
 

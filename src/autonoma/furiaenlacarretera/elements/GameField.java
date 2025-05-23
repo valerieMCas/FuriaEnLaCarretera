@@ -74,10 +74,10 @@ public class GameField extends SpriteContainer {
 
         int width = Car.WIDTH_CAR;
         int height = Car.HEIGH_CAR;
-
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
         while (intentos < intentosMaximos) {
             int x = minX + (int)(Math.random() * (maxX - minX - width));
-            int y = (int)(Math.random() * (getHeight() - height));
+            int y = (int)(Math.random() * (jugadorY - height - 50));
 
             Rectangle nuevoRect = new Rectangle(x, y, width, height);
 
@@ -104,11 +104,10 @@ public class GameField extends SpriteContainer {
 
         int intentos = 0;
         int maxIntentos = 50;
-
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
         while (intentos < maxIntentos) {
             int xt = minX + (int)(Math.random() * (maxX - minX - Cone.WIDTH_CONE));
-            int yt = (int)(Math.random() * (height - Cone.HEIGH_CONE));
-
+            int yt = (int)(Math.random() * (jugadorY - HEIGHT - 50)); 
             Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
             if (!hayColision(nuevoRect)) {
                 Person person = new Person(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
@@ -137,10 +136,10 @@ public class GameField extends SpriteContainer {
 
         int intentos = 0;
         int maxIntentos = 50;
-
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
         while (intentos < maxIntentos) {
             int xt = minX + (int)(Math.random() * (maxX - minX - Cone.WIDTH_CONE));
-            int yt = (int)(Math.random() * (height - Cone.HEIGH_CONE));
+            int yt = (int)(Math.random() * (jugadorY - HEIGHT - 50)); 
 
             Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
             if (!hayColision(nuevoRect)) {
@@ -162,10 +161,10 @@ public class GameField extends SpriteContainer {
 
         int intentos = 0;
         int maxIntentos = 50;
-
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
         while (intentos < maxIntentos) {
             int xt = minX + (int)(Math.random() * (maxX - minX - Currency.WIDTH_CURRENCY));
-            int yt = (int)(Math.random() * (height - Currency.HEIGH_CURRENCY));
+            int yt = (int)(Math.random() * (jugadorY - HEIGHT - 50)); 
 
             Rectangle nuevoRect = new Rectangle(xt, yt, Currency.WIDTH_CURRENCY, Currency.HEIGH_CURRENCY);
             if (!hayColision(nuevoRect)) {
@@ -188,9 +187,10 @@ public class GameField extends SpriteContainer {
             Sprite sprite = sprites.get(i);
             if (sprite instanceof ElementType) {
                 ElementType element = (ElementType) sprite;
-                element.setY(element.getY() + element.getStep()); // mueve verticalmente
 
-                // Elimina elemento si sale del campo
+                element.setY(element.getY() + movimineto);
+
+                // Elimina el elemento si ya pasó la parte inferior del campo
                 if (element.getY() > height) {
                     eliminarElement(element);
                 }
