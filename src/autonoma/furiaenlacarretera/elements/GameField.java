@@ -67,19 +67,47 @@ public class GameField extends SpriteContainer {
      * Metodo para agregar el carro a la pista
      */
     public void addCar() {
-        Car.create(this, this, new Random());
+        int minX = 165; // Por ejemplo, límite izquierdo del carril
+        int maxX = 360; // Límite derecho del carril
+        int intentosMaximos = 100;
+        int intentos = 0;
+
+        int width = Car.WIDTH_CAR;
+        int height = Car.HEIGH_CAR;
+
+        while (intentos < intentosMaximos) {
+            int x = minX + (int)(Math.random() * (maxX - minX - width));
+            int y = (int)(Math.random() * (getHeight() - height));
+
+            Rectangle nuevoRect = new Rectangle(x, y, width, height);
+
+            if (!hayColision(nuevoRect)) {
+                Car carro = new Car(x, y, width, height, this);
+                this.sprites.add(carro);
+                break;
+            }
+
+            intentos++;
+        }
+
+        if (intentos == intentosMaximos) {
+            System.out.println("No se pudo colocar el carro sin superposición tras " + intentosMaximos + " intentos.");
+        }
     }
 
     /**
      * Metodo para agregar la persona a la pista
      */
     public void addPerson() {
+        int minX = 165;
+        int maxX = 360;
+
         int intentos = 0;
         int maxIntentos = 50;
 
         while (intentos < maxIntentos) {
-            int xt = (int) (Math.random() * (width - Cone.WIDTH_CONE));
-            int yt = (int) (Math.random() * (height - Cone.HEIGH_CONE));
+            int xt = minX + (int)(Math.random() * (maxX - minX - Cone.WIDTH_CONE));
+            int yt = (int)(Math.random() * (height - Cone.HEIGH_CONE));
 
             Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
             if (!hayColision(nuevoRect)) {
@@ -104,12 +132,15 @@ public class GameField extends SpriteContainer {
      */
     public void addCone() {
         
+        int minX = 165;
+        int maxX = 360;
+
         int intentos = 0;
         int maxIntentos = 50;
 
         while (intentos < maxIntentos) {
-            int xt = (int) (Math.random() * (width - Cone.WIDTH_CONE));
-            int yt = (int) (Math.random() * (height - Cone.HEIGH_CONE));
+            int xt = minX + (int)(Math.random() * (maxX - minX - Cone.WIDTH_CONE));
+            int yt = (int)(Math.random() * (height - Cone.HEIGH_CONE));
 
             Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
             if (!hayColision(nuevoRect)) {
@@ -126,12 +157,15 @@ public class GameField extends SpriteContainer {
      * Metodo para agregar el carro a la pista
      */
     public void addCurrency() {
+        int minX = 165;
+        int maxX = 360;
+
         int intentos = 0;
         int maxIntentos = 50;
 
         while (intentos < maxIntentos) {
-            int xt = (int) (Math.random() * (width - Currency.WIDTH_CURRENCY));
-            int yt = (int) (Math.random() * (height - Currency.HEIGH_CURRENCY));
+            int xt = minX + (int)(Math.random() * (maxX - minX - Currency.WIDTH_CURRENCY));
+            int yt = (int)(Math.random() * (height - Currency.HEIGH_CURRENCY));
 
             Rectangle nuevoRect = new Rectangle(xt, yt, Currency.WIDTH_CURRENCY, Currency.HEIGH_CURRENCY);
             if (!hayColision(nuevoRect)) {
