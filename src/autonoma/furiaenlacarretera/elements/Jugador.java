@@ -49,6 +49,7 @@ public class Jugador extends Sprite{
     public Jugador(int x, int y, int width, int height) {
         super(x, y, height, width);
         this.puntaje = 0;
+        this.moto = new Moto();
         setImage("chicaMoto.png");
         imagenBuffer = new BufferedImage(WIDTH_JUGADOR,
                 HEIGH_JUGADOR,
@@ -57,7 +58,9 @@ public class Jugador extends Sprite{
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
-    
+    public void setMoto(Moto moto) {
+        this.moto = moto;
+    }
     @Override
     public void paint(Graphics g) {
         g.drawImage(getImage(), x, y, width, height, null);

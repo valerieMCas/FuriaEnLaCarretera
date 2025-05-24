@@ -4,6 +4,8 @@
  */
 package autonoma.furiaenlacarretera.elements;
 
+import javax.swing.Timer;
+
 /**
  *@author Valerie Moreno
  * @since 21/5/2025
@@ -27,21 +29,20 @@ public class Moto {
      * metodo de disminuir comburtible
      */
     public void disminuirCombustible() {
-        try {
-            Thread.sleep(5000); 
-            fuel -= 10;  
-            if (fuel < 0) {
-                 System.out.println("Se acabe el juego ");
-            }
-            System.out.println("Combustible actual: " + fuel);
-        } catch (InterruptedException e) {
+        Timer timer = new Timer(5000, e -> {
+        fuel -= 10;  
+        if (fuel < 0) {
+             System.out.println("Se acabe el juego ");
         }
+        System.out.println("Combustible actual: " + fuel);
+        });
+        timer.start();
     }
     /**
      * metodo de recargar comburtible
      */
     public void recargarCombustible(int cantidad){
-        if (cantidad ==15){
+        if (cantidad ==5){
             this.fuel=100;
         }
     }

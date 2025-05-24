@@ -122,6 +122,7 @@ public class GameField extends SpriteContainer {
         int startY = height - 100;    // cerca de la parte inferior
 
         this.jugador = new Jugador(startX, startY, 50, 40);
+        this.jugador.setMoto(new Moto()); 
         this.sprites.add(jugador);
     }
 
@@ -180,8 +181,11 @@ public class GameField extends SpriteContainer {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
     }
-
+    public void consumirConbustibles(){
+        this.jugador.consumirConbustible();
+    }
     public void update() {
+        consumirConbustibles();
         // 1. Mover obstáculos, monedas y demás elementos hacia abajo (simulando avance)
         for (int i = 0; i < sprites.size(); i++) {
             Sprite sprite = sprites.get(i);
@@ -201,6 +205,7 @@ public class GameField extends SpriteContainer {
         if (offsetY <= 0) {
             offsetY = getImage().getHeight(null);
         }
+        
 
 
 
