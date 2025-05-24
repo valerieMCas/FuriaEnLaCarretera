@@ -18,13 +18,14 @@ import java.awt.image.BufferedImage;
  * @since 21/5/2025
  * @version 1.0.0
  */
-public class Jugador extends Sprite{
+public class Jugador extends Sprite {
+
     /**
      * Atributos
-     * 
+     *
      */
     /**
-     * atributos de tamaño 
+     * atributos de tamaño
      */
     public static final int WIDTH_JUGADOR = 50;
     public static final int HEIGH_JUGADOR = 50;
@@ -35,17 +36,22 @@ public class Jugador extends Sprite{
     /**
      * atributo de instancia de moto
      */
-    private Moto moto; 
+    private Moto moto;
+
+    /**
+     * atributos de vidas
+     */
+    private int cantidadVidas = 2;
     /**
      * atributos de imagen
      */
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
     private static final int STEP = 5;
+
     /**
      * constructor
      */
-    
     public Jugador(int x, int y, int width, int height) {
         super(x, y, height, width);
         this.puntaje = 0;
@@ -58,23 +64,44 @@ public class Jugador extends Sprite{
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
+
     public void setMoto(Moto moto) {
         this.moto = moto;
     }
+
+    public int getCantidadVidas() {
+        return cantidadVidas;
+    }
+
+    public void setCantidadVidas(int cantidadVidas) {
+        this.cantidadVidas = cantidadVidas;
+    }
+
+    public int getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(int score) {
+        this.puntaje = score;
+    }
+    
     @Override
     public void paint(Graphics g) {
         g.drawImage(getImage(), x, y, width, height, null);
     }
-    
-    public void aumentarPuntaje(int score ){
-        this.puntaje +=score;
+
+    public void aumentarPuntaje(int score) {
+        this.puntaje += score;
     }
-    public void consumirConbustible(){
+
+    public void consumirConbustible() {
         this.moto.disminuirCombustible();
     }
-    public void recargarConbustible(int cantindad){
+
+    public void recargarConbustible(int cantindad) {
         this.moto.recargarCombustible(cantindad);
     }
+
     public void mover(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
@@ -98,8 +125,5 @@ public class Jugador extends Sprite{
                 break;
         }
     }
-
-
-
 
 }

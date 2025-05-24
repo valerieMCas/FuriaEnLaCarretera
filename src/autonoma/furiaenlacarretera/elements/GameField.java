@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
@@ -24,19 +25,14 @@ public class GameField extends SpriteContainer {
     /**
      * Atributos
      */
-    /**
-     * Atributo de la instancia de la clase Player
-     */
-    //private Player player;
-    //String[] options = {"Sí", "No"};
+
     private EscritorArchivoTextoPlano escritor;
     private LectorArchivoTextoPlano lector;
     private Jugador jugador;
-    private int offsetX = 0; 
+    private int offsetX = 0;
     private int offsetY = 0;
     private static final int movimineto = 5;
-
-    
+    private boolean partidaTerminada = false;
 
     private int maxScore = 0;
 
@@ -51,18 +47,27 @@ public class GameField extends SpriteContainer {
 //    public Player getPlayer() {
 //        return player;
 //    }
+    public boolean getPartidaTerminada() {
+        return partidaTerminada;
+    }
+
+    public void setPartidaTerminada(boolean partidaTerminada) {
+        this.partidaTerminada = partidaTerminada;
+    }
+
     public List<Sprite> getSprites() {
         return sprites;
     }
+
     private boolean hayColision(Rectangle nuevoRect) {
-    for (Sprite sprite : sprites) {
-        if (sprite.getBoundaries().intersects(nuevoRect)) {
-            return true;
+        for (Sprite sprite : sprites) {
+            if (sprite.getBoundaries().intersects(nuevoRect)) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
-    
+
     /**
      * Metodo para agregar el carro a la pista
      */
@@ -74,10 +79,10 @@ public class GameField extends SpriteContainer {
 
         int width = Car.WIDTH_CAR;
         int height = Car.HEIGH_CAR;
-        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();
         while (intentos < intentosMaximos) {
-            int x = minX + (int)(Math.random() * (maxX - minX - width));
-            int y = (int)(Math.random() * (jugadorY - height - 50));
+            int x = minX + (int) (Math.random() * (maxX - minX - width));
+            int y = (int) (Math.random() * (jugadorY - height - 50));
 
             Rectangle nuevoRect = new Rectangle(x, y, width, height);
 
@@ -104,10 +109,10 @@ public class GameField extends SpriteContainer {
 
         int intentos = 0;
         int maxIntentos = 50;
-        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();
         while (intentos < maxIntentos) {
-            int xt = minX + (int)(Math.random() * (maxX - minX - Cone.WIDTH_CONE));
-            int yt = (int)(Math.random() * (jugadorY - HEIGHT - 50)); 
+            int xt = minX + (int) (Math.random() * (maxX - minX - Cone.WIDTH_CONE));
+            int yt = (int) (Math.random() * (jugadorY - HEIGHT - 50));
             Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
             if (!hayColision(nuevoRect)) {
                 Person person = new Person(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
@@ -117,30 +122,30 @@ public class GameField extends SpriteContainer {
             intentos++;
         }
     }
+
     public void addJugador() {
         int startX = width / 2 - 25;  // centrado horizontalmente, restando la mitad del ancho del jugador
         int startY = height - 100;    // cerca de la parte inferior
 
         this.jugador = new Jugador(startX, startY, 50, 40);
-        this.jugador.setMoto(new Moto()); 
+        this.jugador.setMoto(new Moto());
         this.sprites.add(jugador);
     }
-
 
     /**
      * Metodo para agregar el cono a la pista
      */
     public void addCone() {
-        
+
         int minX = 165;
         int maxX = 360;
 
         int intentos = 0;
         int maxIntentos = 50;
-        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();
         while (intentos < maxIntentos) {
-            int xt = minX + (int)(Math.random() * (maxX - minX - Cone.WIDTH_CONE));
-            int yt = (int)(Math.random() * (jugadorY - HEIGHT - 50)); 
+            int xt = minX + (int) (Math.random() * (maxX - minX - Cone.WIDTH_CONE));
+            int yt = (int) (Math.random() * (jugadorY - HEIGHT - 50));
 
             Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
             if (!hayColision(nuevoRect)) {
@@ -151,7 +156,6 @@ public class GameField extends SpriteContainer {
             intentos++;
         }
     }
-    
 
     /**
      * Metodo para agregar el carro a la pista
@@ -162,10 +166,10 @@ public class GameField extends SpriteContainer {
 
         int intentos = 0;
         int maxIntentos = 50;
-        int jugadorY = jugador != null ? jugador.getY() : getHeight();  
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();
         while (intentos < maxIntentos) {
-            int xt = minX + (int)(Math.random() * (maxX - minX - Currency.WIDTH_CURRENCY));
-            int yt = (int)(Math.random() * (jugadorY - HEIGHT - 50)); 
+            int xt = minX + (int) (Math.random() * (maxX - minX - Currency.WIDTH_CURRENCY));
+            int yt = (int) (Math.random() * (jugadorY - HEIGHT - 50));
 
             Rectangle nuevoRect = new Rectangle(xt, yt, Currency.WIDTH_CURRENCY, Currency.HEIGH_CURRENCY);
             if (!hayColision(nuevoRect)) {
@@ -181,12 +185,29 @@ public class GameField extends SpriteContainer {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
     }
-    public void consumirConbustibles(){
+
+    public void consumirConbustibles() {
         this.jugador.consumirConbustible();
     }
+
+    public void finalizarPartida() {
+        this.partidaTerminada = true;
+        this.sprites.clear();
+        this.refresh();
+        System.out.println("Partida finalizada.");
+        
+        if (gameContainer instanceof JFrame) {
+            ((JFrame) gameContainer).dispose();
+        }
+    }
+
     public void update() {
         consumirConbustibles();
-        // 1. Mover obstáculos, monedas y demás elementos hacia abajo (simulando avance)
+        if(jugador.getCantidadVidas() < 1){
+            finalizarPartida();
+            return;
+        }
+        //Mover obstaculos, monedas y demás elementos hacia abajo (simulando avance)
         for (int i = 0; i < sprites.size(); i++) {
             Sprite sprite = sprites.get(i);
             if (sprite instanceof ElementType) {
@@ -200,39 +221,12 @@ public class GameField extends SpriteContainer {
                 }
             }
         }
-      // Movimiento automático del fondo
+        // Movimiento automático del fondo
         offsetY -= movimineto;
         if (offsetY <= 0) {
             offsetY = getImage().getHeight(null);
         }
-        
 
-
-
-//        // 2. Actualizar posición del jugador si se está moviendo entre carriles
-//        // (Asumiendo que tienes lógica para mover el jugador horizontalmente)
-//        // 3. Revisar colisiones jugador vs obstáculos/monedas
-//        for (Sprite sprite : sprites) {
-//            if (sprite.getBordes().intersects(car.getBordes())) {
-//                if (sprite instanceof Obstacle) {
-//                    // Colisión con obstáculo
-//                    manejarColisionObstaculo();
-//                    break;
-//                } else if (sprite instanceof Currency) {
-//                    // Recolectar moneda
-//                    recolectarMoneda((Currency) sprite);
-//                    eliminarElement((ElementType) sprite);
-//                }
-//            }
-//        }
-//
-//        // 4. Consumir gasolina con el tiempo / distancia recorrida
-//        consumirGasolina();
-//
-//        // 5. Verificar si se acabó la gasolina
-//        if (gasolina <= 0) {
-//            manejarFinDeJuegoPorGasolina();
-//        }
         refresh();  // Refresca pantalla
     }
 
@@ -248,24 +242,23 @@ public class GameField extends SpriteContainer {
         g.drawImage(fondo, 0, y1, getWidth(), fondoAlto, null);
         g.drawImage(fondo, 0, y1 + fondoAlto, getWidth(), fondoAlto, null);
 
-
         // Copiar la lista para evitar problemas de concurrencia
         List<Sprite> copiaSprites = new ArrayList<>(sprites);
 
         for (Sprite sprite : copiaSprites) {
-            if (sprite != null) {   // <-- Aquí chequeas que no sea null
+            if (sprite != null) {  
                 sprite.paint(g);
             }
         }
         //jugador.paint(g);
     }
+
     public void keyPressed(KeyEvent e) {
         if (jugador != null) {
             jugador.mover(e);
             refresh(); // o repaint()
         }
     }
-
 
     @Override
     public Rectangle getBordes() {
