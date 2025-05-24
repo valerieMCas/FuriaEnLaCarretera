@@ -1,6 +1,7 @@
 package autonoma.furiaenlacarretera.elements;
 
 import autonoma.furiaenlacarretera.elements.Cone;
+import autonoma.furiaenlacarretera.views.GameWindow;
 import gamebase.elements.EscritorArchivoTextoPlano;
 import gamebase.elements.LectorArchivoTextoPlano;
 import gamebase.elements.Sprite;
@@ -25,7 +26,6 @@ public class GameField extends SpriteContainer {
     /**
      * Atributos
      */
-
     private EscritorArchivoTextoPlano escritor;
     private LectorArchivoTextoPlano lector;
     private Jugador jugador;
@@ -185,25 +185,39 @@ public class GameField extends SpriteContainer {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
     }
-
-    public void consumirConbustibles() {
-        this.jugador.consumirConbustible();
-    }
-
+    /**
+     * Finaliza la partida actual.
+     *
+     *
+     * elimina todos los sprites del campo de juego, refresca la pantalla y
+     * muestra un mensaje de finalización en la consola. Si el contenedor del
+     * juego es una ventana la cierra automáticamente.
+     */
     public void finalizarPartida() {
         this.partidaTerminada = true;
         this.sprites.clear();
         this.refresh();
         System.out.println("Partida finalizada.");
-        
-        if (gameContainer instanceof JFrame) {
-            ((JFrame) gameContainer).dispose();
+
+        if (gameContainer instanceof GameWindow) {
+            ((GameWindow) gameContainer).terminarPartida();
         }
     }
 
+    /**
+     * Actualiza el estado del campo de juego en cada ciclo del juego.
+     *
+     * Este método realiza varias operaciones: - Consume combustible de la moto
+     * del jugador. - Verifica si el jugador se queda sin vidas o sin
+     * combustible, y finaliza la partida si es necesario. - Mueve los elementos
+     * (carros, conos, personas, monedas, etc.) hacia abajo, simulando avance. -
+     * Elimina los elementos que salen de la pantalla. - Desplaza la imagen de
+     * fondo para crear un efecto de desplazamiento continuo. - Refresca la
+     * pantalla para mostrar los cambios.
+     */
     public void update() {
-        consumirConbustibles();
-        if(jugador.getCantidadVidas() < 1){
+        jugador.consumirConbustible();
+        if (jugador.getCantidadVidas() <= 0 || jugador.getMoto().estaSinCombustible()) {
             finalizarPartida();
             return;
         }
@@ -246,7 +260,7 @@ public class GameField extends SpriteContainer {
         List<Sprite> copiaSprites = new ArrayList<>(sprites);
 
         for (Sprite sprite : copiaSprites) {
-            if (sprite != null) {  
+            if (sprite != null) {
                 sprite.paint(g);
             }
         }

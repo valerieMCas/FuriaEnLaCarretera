@@ -73,6 +73,10 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         gameField.refresh();
     }
 
+    public void terminarPartida() {
+        manejarFinDePartida();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

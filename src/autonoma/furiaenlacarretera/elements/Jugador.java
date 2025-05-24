@@ -69,6 +69,10 @@ public class Jugador extends Sprite {
         this.moto = moto;
     }
 
+    public Moto getMoto() {
+        return moto;
+    }
+
     public int getCantidadVidas() {
         return cantidadVidas;
     }
@@ -84,7 +88,7 @@ public class Jugador extends Sprite {
     public void setPuntaje(int score) {
         this.puntaje = score;
     }
-    
+
     @Override
     public void paint(Graphics g) {
         g.drawImage(getImage(), x, y, width, height, null);
@@ -95,7 +99,9 @@ public class Jugador extends Sprite {
     }
 
     public void consumirConbustible() {
-        this.moto.disminuirCombustible();
+        if (moto != null) {
+            moto.consumirCombustible();
+        }
     }
 
     public void recargarConbustible(int cantindad) {

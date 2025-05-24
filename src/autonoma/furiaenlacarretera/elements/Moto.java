@@ -31,30 +31,30 @@ public class Moto {
         this.fuel = 10;
     }
 
-    /**
-     * metodo de disminuir comburtible
-     */
-    public void disminuirCombustible() {
-        timerCombustible = new Timer(5000, e -> {
-            fuel -= 10;
-            
-            if (fuel <= 0) {
-                fuel = 0;
-                timerCombustible.stop();
-                System.out.println("Se acabó el combustible. Fin del juego.");
-            } else {
-                System.out.println("Combustible actual: " + fuel);
-            }
-        });
-        timerCombustible.start();
+    public int getFuel() {
+        return fuel;
     }
 
-    /**
-     * metodo de recargar comburtible
-     */
-    public void recargarCombustible(int cantidad){
-        if (cantidad ==5){
-            this.fuel=100;
+    public void setFuel(int fuel) {
+        this.fuel = fuel;
+    }
+
+    
+    public void consumirCombustible() {
+        fuel -= 1;
+        if (fuel < 0) {
+            fuel = 0;
+        }
+    }
+
+    public boolean estaSinCombustible() {
+        return fuel <= 0;
+    }
+
+    public void recargarCombustible(int cantidad) {
+        fuel += cantidad;
+        if (fuel > 100) {
+            fuel = 100;
         }
     }
 }
