@@ -93,7 +93,6 @@ public class Cone extends ElementType {
 
     @Override
     public void paint(Graphics g) {
-        System.out.println("Paint cono");
         g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 

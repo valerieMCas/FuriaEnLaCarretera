@@ -94,7 +94,6 @@ public class Person extends ElementType {
 
     @Override
     public void paint(Graphics g) {
-        System.out.println("Paint carro");
         g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
 
     }

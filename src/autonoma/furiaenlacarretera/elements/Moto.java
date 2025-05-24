@@ -20,24 +20,35 @@ public class Moto {
      */
     private int fuel;
     /**
+     * atributo timer
+     */
+    private Timer timerCombustible;
+    /**
      * constructor
      */
-    public Moto() {
-        this.fuel = 100;
+    public Moto() {    
+        
+        this.fuel = 10;
     }
+
     /**
      * metodo de disminuir comburtible
      */
     public void disminuirCombustible() {
-        Timer timer = new Timer(5000, e -> {
-        fuel -= 10;  
-        if (fuel < 0) {
-             System.out.println("Se acabe el juego ");
-        }
-        System.out.println("Combustible actual: " + fuel);
+        timerCombustible = new Timer(5000, e -> {
+            fuel -= 10;
+            
+            if (fuel <= 0) {
+                fuel = 0;
+                timerCombustible.stop();
+                System.out.println("Se acabó el combustible. Fin del juego.");
+            } else {
+                System.out.println("Combustible actual: " + fuel);
+            }
         });
-        timer.start();
+        timerCombustible.start();
     }
+
     /**
      * metodo de recargar comburtible
      */
