@@ -132,7 +132,6 @@ public class GameField extends SpriteContainer {
         this.sprites.add(jugador);
     }
 
-
     /**
      * Metodo para agregar la moneda a la pista
      */
@@ -219,8 +218,30 @@ public class GameField extends SpriteContainer {
         if (offsetY <= 0) {
             offsetY = getImage().getHeight(null);
         }
-
+        processCollisionMotorbike();
         refresh();  // Refresca pantalla
+    }
+
+    private void processCollisionMotorbike() {
+        for (int i = sprites.size() - 1; i >= 0; i--) {
+            // instanceof es un operador que se usa para verificar si un objeto es de un tipo específico
+            if (sprites.get(i) instanceof ElementType) {
+                // Convierte el objeto a tipo ElementType para poder trabajar con él como tal.
+                ElementType element = (ElementType) sprites.get(i);
+
+                if (jugador.checkCollision(element)) {
+                    if (element instanceof Car) {
+                        sprites.remove(element);
+                    } else if (element instanceof Person) {
+                        sprites.remove(element);
+                    } else if (element instanceof Currency) {
+                        sprites.remove(element);
+                    } else {
+                        System.out.println("ERROR: GameField.processCollisionMotorbike. Unknown type of ElementType");
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -246,10 +267,14 @@ public class GameField extends SpriteContainer {
         //jugador.paint(g);
     }
 
-    public void keyPressed(KeyEvent e) {
-        if (jugador != null) {
-            jugador.mover(e);
-            refresh(); // o repaint()
+    public void keyPressed(int code) {
+        if (code == KeyEvent.VK_LEFT
+                | code == KeyEvent.VK_RIGHT) {
+            if (jugador != null) {
+                jugador.mover(code);
+                processCollisionMotorbike();
+                refresh();
+            }
         }
     }
 
