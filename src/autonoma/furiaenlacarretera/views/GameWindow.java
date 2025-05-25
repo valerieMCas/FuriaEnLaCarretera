@@ -112,12 +112,12 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        int code = evt.getKeyCode();
-        if (code == KeyEvent.VK_Q) {
+        if (evt.getKeyCode() == KeyEvent.VK_Q) {
             System.exit(0);
-        } else if (code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN
-                || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
-            gameField.keyPressed(evt);
+        }if (evt.getKeyCode() == KeyEvent.VK_LEFT |
+             evt.getKeyCode() == KeyEvent.VK_RIGHT) 
+        {
+            gameField.keyPressed(evt.getKeyCode());
         }
 
     }//GEN-LAST:event_formKeyPressed

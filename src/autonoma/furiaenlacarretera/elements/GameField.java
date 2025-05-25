@@ -42,9 +42,9 @@ public class GameField extends SpriteContainer {
 
     private int maxScore = 0;
 
-    public GameField(int x, int y, int height, int width) {
+    public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
         super(x, y, height, width);
-        setImage("mapa.jpeg");
+        setImage(mapaSeleccionado);
     }
 
     /**
@@ -139,32 +139,7 @@ public class GameField extends SpriteContainer {
     }
 
     /**
-     * Metodo para agregar el cono a la pista
-     */
-    public void addCone() {
-
-        int minX = 165;
-        int maxX = 360;
-
-        int intentos = 0;
-        int maxIntentos = 50;
-        int jugadorY = jugador != null ? jugador.getY() : getHeight();
-        while (intentos < maxIntentos) {
-            int xt = minX + (int) (Math.random() * (maxX - minX - Cone.WIDTH_CONE));
-            int yt = (int) (Math.random() * (jugadorY - HEIGHT - 50));
-
-            Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
-            if (!hayColision(nuevoRect)) {
-                Cone cone = new Cone(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
-                add(cone);
-                break;
-            }
-            intentos++;
-        }
-    }
-
-    /**
-     * Metodo para agregar el carro a la pista
+     * Metodo para agregar la moneda a la pista
      */
     public void addCurrency() {
         int minX = 165;
@@ -208,6 +183,7 @@ public class GameField extends SpriteContainer {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
     }
+
     /**
      * Finaliza la partida actual.
      *
@@ -250,6 +226,7 @@ public class GameField extends SpriteContainer {
             finalizarPartida();
             return;
         }
+
         //Mover obstaculos, monedas y demás elementos hacia abajo (simulando avance)
         // 1. Mover obstáculos, monedas y demás elementos hacia abajo (simulando avance)
         for (int i = 0; i < sprites.size(); i++) {
@@ -270,8 +247,30 @@ public class GameField extends SpriteContainer {
         if (offsetY <= 0) {
             offsetY = getImage().getHeight(null);
         }
-
+        processCollisionMotorbike();
         refresh();  // Refresca pantalla
+    }
+
+    private void processCollisionMotorbike() {
+        for (int i = sprites.size() - 1; i >= 0; i--) {
+            // instanceof es un operador que se usa para verificar si un objeto es de un tipo específico
+            if (sprites.get(i) instanceof ElementType) {
+                // Convierte el objeto a tipo ElementType para poder trabajar con él como tal.
+                ElementType element = (ElementType) sprites.get(i);
+
+                if (jugador.checkCollision(element)) {
+                    if (element instanceof Car) {
+                        sprites.remove(element);
+                    } else if (element instanceof Person) {
+                        sprites.remove(element);
+                    } else if (element instanceof Currency) {
+                        sprites.remove(element);
+                    } else {
+                        System.out.println("ERROR: GameField.processCollisionMotorbike. Unknown type of ElementType");
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -301,10 +300,14 @@ public class GameField extends SpriteContainer {
         //jugador.paint(g);
     }
 
-    public void keyPressed(KeyEvent e) {
-        if (jugador != null) {
-            jugador.mover(e);
-            refresh(); // o repaint()
+    public void keyPressed(int code) {
+        if (code == KeyEvent.VK_LEFT
+                | code == KeyEvent.VK_RIGHT) {
+            if (jugador != null) {
+                jugador.mover(code);
+                processCollisionMotorbike();
+                refresh();
+            }
         }
     }
 

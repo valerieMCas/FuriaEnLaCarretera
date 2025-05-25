@@ -77,13 +77,24 @@ public abstract class Sprite extends Canvas {
 
     public BufferedImage setImage(String filename) {
         try {
-            setImage(ImageIO.read(getClass().getResourceAsStream("/autonoma/furiaenlacarretera/images/" + filename)));
+            var stream = getClass().getResourceAsStream("/autonoma/furiaenlacarretera/images/" + filename);
+            System.out.println(getClass().getResource("/autonoma/furiaenlacarretera/images/" + filename));
 
+            if (stream == null) {
+                System.out.println("No se encontró el recurso: " + filename);
+                return null;
+            }
+            BufferedImage img = ImageIO.read(stream);
+            if (img == null) {
+                System.out.println("No se pudo leer la imagen: " + filename);
+                return null;
+            }
+            setImage(img);
             return getImage();
         } catch (IOException e) {
-            System.out.println("No veo la imagen" + filename);
+            System.out.println("Error leyendo la imagen: " + filename);
+            e.printStackTrace();
         }
-
         return null;
     }
 
@@ -100,30 +111,30 @@ public abstract class Sprite extends Canvas {
         return new Rectangle(x, y, width, height);
     }
 
-    public boolean fueraContenedor(int x, int y)
-    {
-        if(getContenedor() == null)
+    public boolean fueraContenedor(int x, int y) {
+        if (getContenedor() == null) {
             return false;
-        
+        }
+
         Rectangle bounds = getContenedor().getBordes();
-        
-        return !(x >= bounds.getX() &
-                 y>= bounds.getY() &
-                 x + getWidth()  <= bounds.getX() + bounds.getWidth() &
-                 y + getHeight() <= bounds.getY() + bounds.getHeight());
+
+        return !(x >= bounds.getX()
+                & y >= bounds.getY()
+                & x + getWidth() <= bounds.getX() + bounds.getWidth()
+                & y + getHeight() <= bounds.getY() + bounds.getHeight());
     }
-    
-    public boolean fueraContenedor(int x, int y, int w, int h)
-    {
-        if(getContenedor() == null)
+
+    public boolean fueraContenedor(int x, int y, int w, int h) {
+        if (getContenedor() == null) {
             return false;
-        
+        }
+
         Rectangle bounds = new Rectangle(x, y, w, h);
-        
-        return !(getX() >= bounds.getX() &
-                 getY() >= bounds.getY() &
-                 getX() + getWidth()  <= bounds.getX() + bounds.getWidth() &
-                 getY() + getHeight() <= bounds.getY() + bounds.getHeight());
+
+        return !(getX() >= bounds.getX()
+                & getY() >= bounds.getY()
+                & getX() + getWidth() <= bounds.getX() + bounds.getWidth()
+                & getY() + getHeight() <= bounds.getY() + bounds.getHeight());
     }
 
     //Este método verifica si dos sprites se están tocando (por ejemplo, el gnomo y un hongo) usando colisión de rectángulos (bounding box):
@@ -146,7 +157,7 @@ public abstract class Sprite extends Canvas {
         return collisionX && collisionY;
     }
 
-    public abstract void paint( Graphics g);
+    public abstract void paint(Graphics g);
 
     public GraphicContainer getContenedor() {
         return gameContainer;
