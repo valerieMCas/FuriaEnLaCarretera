@@ -303,25 +303,33 @@ public class GameField extends SpriteContainer {
 
     private void processCollisionMotorbike() {
         for (int i = sprites.size() - 1; i >= 0; i--) {
-            // instanceof es un operador que se usa para verificar si un objeto es de un tipo específico
             if (sprites.get(i) instanceof ElementType) {
-                // Convierte el objeto a tipo ElementType para poder trabajar con él como tal.
                 ElementType element = (ElementType) sprites.get(i);
 
                 if (jugador.checkCollision(element)) {
-                    if (element instanceof Car) {
+                    if (element instanceof Car || element instanceof Person) {
+                        // Reducir vida al colisionar con Car o Person
+                        jugador.eliminarVida();
+
+                        // Eliminar el elemento tras la colisión
                         sprites.remove(element);
-                    } else if (element instanceof Person) {
-                        sprites.remove(element);
+
+                        // Verificar si el jugador se quedó sin vidas
+                        if (jugador.getCantidadVidas() <= 0) {
+                            finalizarPartida();
+                            return;
+                        }
                     } else if (element instanceof Currency) {
+                        // Podrías sumar puntos o combustible, si quieres
                         sprites.remove(element);
                     } else {
-                        System.out.println("ERROR: GameField.processCollisionMotorbike. Unknown type of ElementType");
+                        System.out.println("ERROR: GameField.processCollisionMotorbike. Tipo desconocido de ElementType");
                     }
                 }
             }
         }
     }
+
 
     @Override
     public void paint(Graphics g) {

@@ -125,5 +125,23 @@ public class Jugador extends Sprite {
         }
     }
     
+    /**
+     * Disminuye una vida al jugador.
+     * Si se queda sin vidas, podrías lanzar un evento o manejarlo desde GameField.
+     */
+    public void eliminarVida() {
+        if (cantidadVidas > 0) {
+            cantidadVidas--;
+        }
+    }
+
+    /**
+     * Verifica si el jugador perdió todas sus vidas.
+     */
+    public boolean estaMuerto() {
+        return cantidadVidas <= 0;
+    }
+
+    
 
 }
