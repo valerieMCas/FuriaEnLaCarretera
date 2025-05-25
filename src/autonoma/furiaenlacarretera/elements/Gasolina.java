@@ -31,7 +31,7 @@ public class Gasolina extends ElementType {
 
     public Gasolina(int x, int y, int height, int width, GraphicContainer g) {
         super(x, y, height, width);
-        setImage("moneda.png");
+        setImage("gasolina.png");
         gameContainer = g;
         paso = (int) ((Math.random() * 10) + 5);
         //paso = 1;
@@ -86,8 +86,9 @@ public class Gasolina extends ElementType {
         }
 
         if (!seSobrepone) {
-            Cone cono = new Cone(x, y, WIDTH_CONE, HEIGH_CONE, container);
-            cono.registerHitGameField(gameField);
+            Gasolina gasolina = new Gasolina(x, y, HEIGH_CURRENCY, WIDTH_CURRENCY, container);
+            gasolina.registerHitGameField(gameField);
+
         } else {
             System.out.println("No se pudo colocar el cono sin superposición tras " + intentosMaximos + " intentos.");
         }

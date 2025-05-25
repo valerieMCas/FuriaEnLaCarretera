@@ -39,6 +39,7 @@ public class GameField extends SpriteContainer {
     private boolean partidaTerminada = false;
     private Timer gameTimer;
     private Thread contadorTiempo;
+    private Thread ponerGasolina;
 
     private int maxScore = 0;
 
@@ -104,6 +105,40 @@ public class GameField extends SpriteContainer {
         if (intentos == intentosMaximos) {
             System.out.println("No se pudo colocar el carro sin superposición tras " + intentosMaximos + " intentos.");
         }
+    }
+    /**
+     * Metodo para agregar la gasolina a la pista
+     */
+    public void addGasolina(){
+        int minX = 165; // Por ejemplo, límite izquierdo del carril
+        int maxX = 360;
+        int width = 50; // tamaño estimado, ajusta según tu sprite
+        int height = 50;
+        int intentosMaximos = 100;
+        int intentos = 0;
+
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();
+
+        while (intentos < intentosMaximos) {
+            int x = minX + (int)(Math.random() * (maxX - minX - width));
+            int y = (int)(Math.random() * (jugadorY - height - 50));
+
+            Rectangle nuevoRect = new Rectangle(x, y, width, height);
+
+            if (!hayColision(nuevoRect)) {
+                Gasolina gasolina = new Gasolina(x, y, width, height, this);
+                this.sprites.add(gasolina);
+                System.out.println("Gasolina agregada en (" + x + ", " + y + ")");
+                break;
+            }
+
+            intentos++;
+        }
+
+        if (intentos == intentosMaximos) {
+            System.out.println("No se pudo colocar la gasolina sin superposición tras " + intentosMaximos + " intentos.");
+        }
+
     }
 
     /**
@@ -178,7 +213,22 @@ public class GameField extends SpriteContainer {
         });
         contadorTiempo.start();
     }
-
+    public void iniciarGasolina() {
+        ponerGasolina = new Thread(() -> {
+            while (!partidaTerminada) {
+                try {
+                    Thread.sleep(20000); // 20 segundos
+                    if (!partidaTerminada) {
+                        addGasolina();
+                        refresh();
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        ponerGasolina.start();
+    }
     public void eliminarElement(ElementType element) {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);

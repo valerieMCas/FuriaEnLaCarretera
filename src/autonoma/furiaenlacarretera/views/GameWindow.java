@@ -75,6 +75,7 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         gameField.refresh();
         gameField.iniciarContadorTiempo();
         gameField.menejarCombustible();
+        gameField.iniciarGasolina();
     }
 
     public void terminarPartida() {

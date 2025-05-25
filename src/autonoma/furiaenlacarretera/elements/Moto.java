@@ -59,7 +59,7 @@ public class Moto {
         contadorGasolina = new Thread(()->{
             while (!estaSinConbustible){
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                     if(fuel>0){
                         fuel-=10;
                         System.out.println(fuel);
