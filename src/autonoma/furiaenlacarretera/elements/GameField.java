@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -29,6 +30,7 @@ public class GameField extends SpriteContainer {
     private EscritorArchivoTextoPlano escritor;
     private LectorArchivoTextoPlano lector;
     private Jugador jugador;
+    private Police police;
     private int offsetX = 0;
     private int offsetY = 0;
     private static final int movimineto = 5;
@@ -156,9 +158,77 @@ public class GameField extends SpriteContainer {
         }
     }
 
+    public void addPolice() {
+        if (this.police == null) {
+            // Tomamos la posición X actual del jugador
+            int startX = jugador.getX();
+
+            // Posición Y debajo del campo de juego (para que suba persiguiendo)
+            int startY = this.height + 50;
+            this.police = new Police(startX, startY, Police.WIDTH, Police.HEIGHT);
+            this.police.setGamefield(this);  //referencia del gamefield donde esta
+            this.police.setDelay(50);
+            this.police.iniciarPersecucion();
+            this.sprites.add(police);
+            System.out.println("Policía agregado a la pista");
+        }
+    }
+
+    public void eliminarPolice() {
+        if (police != null) {
+            sprites.remove(police);
+            police.stop();
+            police = null;
+            System.out.println("Policía eliminado ");
+        }
+    }
+
     public void eliminarElement(ElementType element) {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
+    }
+
+    //calcula como moverse hacia el gnomo
+    public void moverPoliceJugador() {
+        if (police == null || jugador == null) {
+            return;
+        }
+        int speed = police.getStep();
+
+        int dx = jugador.getX() - police.getX();
+        int dy = jugador.getY() - police.getY();
+        int moveX = 0;
+        int moveY = 0;
+
+        if (dx > 0) {
+            moveX = speed; // El police se movera a la derecha
+        } else if (dx < 0) {
+            moveX = -speed;// El police se movera a la Izquierda
+        }
+
+        if (dy > 0) {
+            moveY = speed; // El police se movera a la derecha
+        } else if (dx < 0) {
+            moveY = -speed;// El police se movera a la Izquierda
+        }
+        police.setX(police.getX() + moveX);
+        police.setY(police.getY() + moveY);
+
+    }
+
+    public void TrollCaughtProcess() {
+        for (int i = 0; i < sprites.size(); i++) {
+            if (sprites.get(i) instanceof Police) {
+                Police police = (Police) sprites.get(i);
+
+                if (jugador.checkCollision(police)) {
+                    if (gameContainer instanceof GameWindow) {
+                        ((GameWindow) gameContainer).atrapadoPolice();
+                    }
+
+                }
+            }
+        }
     }
 
     /**
@@ -202,7 +272,7 @@ public class GameField extends SpriteContainer {
         //Mover obstaculos, monedas y demás elementos hacia abajo (simulando avance)
         for (int i = 0; i < sprites.size(); i++) {
             Sprite sprite = sprites.get(i);
-            if (sprite instanceof ElementType) {
+            if (sprite instanceof ElementType && !(sprite instanceof Police)) {
                 ElementType element = (ElementType) sprite;
 
                 element.setY(element.getY() + movimineto);
@@ -219,21 +289,27 @@ public class GameField extends SpriteContainer {
             offsetY = getImage().getHeight(null);
         }
         processCollisionMotorbike();
+        if (police != null) {
+            moverPoliceJugador();
+        }
         refresh();  // Refresca pantalla
     }
 
     private void processCollisionMotorbike() {
-        for (int i = sprites.size() - 1; i >= 0; i--) {
-            // instanceof es un operador que se usa para verificar si un objeto es de un tipo específico
-            if (sprites.get(i) instanceof ElementType) {
-                // Convierte el objeto a tipo ElementType para poder trabajar con él como tal.
-                ElementType element = (ElementType) sprites.get(i);
+        List<Sprite> copiaSprites = new ArrayList<>(sprites);  // Copiamos para evitar problemas de concurrencia
+
+        for (Sprite s : copiaSprites) {
+            if (s instanceof ElementType) {
+                ElementType element = (ElementType) s;
 
                 if (jugador.checkCollision(element)) {
                     if (element instanceof Car) {
                         sprites.remove(element);
+                        addPolice();
+                        TrollCaughtProcess();
                     } else if (element instanceof Person) {
                         sprites.remove(element);
+                        addPolice();
                     } else if (element instanceof Currency) {
                         sprites.remove(element);
                     } else {
