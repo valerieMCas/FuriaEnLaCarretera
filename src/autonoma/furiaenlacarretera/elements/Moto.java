@@ -4,6 +4,10 @@
  */
 package autonoma.furiaenlacarretera.elements;
 
+import autonoma.furiaenlacarretera.elements.Gasolina;
+import com.sun.source.tree.Tree;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 /**
@@ -16,19 +20,18 @@ public class Moto {
      * atributos
      */
     /**
-     * atributo de fuel
-     */
-    private int fuel;
-    /**
      * atributo timer
      */
     private Timer timerCombustible;
+    private int fuel;
+    private Thread contadorGasolina;
+    private boolean estaSinConbustible;
     /**
      * constructor
      */
     public Moto() {    
-        
-        this.fuel = 10;
+        this.fuel=100;
+        this.estaSinConbustible = false;
     }
 
     public int getFuel() {
@@ -39,22 +42,46 @@ public class Moto {
         this.fuel = fuel;
     }
 
+    public boolean isEstaSinConbustible() {
+        return estaSinConbustible;
+    }
+
+    public void setEstaSinConbustible(boolean estaSinConbustible) {
+        this.estaSinConbustible = estaSinConbustible;
+    }
     
-    public void consumirCombustible() {
-        fuel -= 1;
-        if (fuel < 0) {
-            fuel = 0;
-        }
+
+    
+    /**
+     * metodo de disminuir comburtible
+     */
+    public void disminuirCombustible() {
+        contadorGasolina = new Thread(()->{
+            while (!estaSinConbustible){
+                try {
+                    Thread.sleep(5000);
+                    if(fuel>0){
+                        fuel-=10;
+                        System.out.println(fuel);
+                    }
+                    else{
+                        estaSinConbustible=true;
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        contadorGasolina.start();
     }
 
-    public boolean estaSinCombustible() {
-        return fuel <= 0;
-    }
-
-    public void recargarCombustible(int cantidad) {
-        fuel += cantidad;
-        if (fuel > 100) {
-            fuel = 100;
+    /**
+     * metodo de recargar comburtible
+     */
+    public void recargarCombustible(int cantidad){
+        if (cantidad == 5) {
+            fuel=100;
+            estaSinConbustible = true;
         }
     }
 }

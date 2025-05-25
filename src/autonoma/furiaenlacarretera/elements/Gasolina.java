@@ -28,10 +28,10 @@ public class Gasolina extends ElementType {
     private Graphics g_imagenBuffer;
     private int paso;
 
+
     public Gasolina(int x, int y, int height, int width, GraphicContainer g) {
         super(x, y, height, width);
         setImage("moneda.png");
-
         gameContainer = g;
         paso = (int) ((Math.random() * 10) + 5);
         //paso = 1;
@@ -47,6 +47,7 @@ public class Gasolina extends ElementType {
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
+    
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);

@@ -6,17 +6,21 @@ import gamebase.elements.EscritorArchivoTextoPlano;
 import gamebase.elements.LectorArchivoTextoPlano;
 import gamebase.elements.Sprite;
 import gamebase.elements.SpriteContainer;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 import javax.swing.JFrame;
-
+import javax.swing.Timer;
 /**
  *
  * @author Kamii
@@ -33,6 +37,8 @@ public class GameField extends SpriteContainer {
     private int offsetY = 0;
     private static final int movimineto = 5;
     private boolean partidaTerminada = false;
+    private Timer gameTimer;
+    private Thread contadorTiempo;
 
     private int maxScore = 0;
 
@@ -180,6 +186,23 @@ public class GameField extends SpriteContainer {
             intentos++;
         }
     }
+    public void iniciarContadorTiempo() {
+        contadorTiempo =new Thread(() -> {
+            while (!partidaTerminada) {
+                try {
+                    Thread.sleep(2000);
+                    if (jugador != null) {
+                        jugador.aumentarPuntaje(1);
+                        System.out.println("Puntaje: " + jugador.getPuntaje());
+                        refresh();
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        contadorTiempo.start();
+    }
 
     public void eliminarElement(ElementType element) {
         // Aumenta el puntaje del jugador por cada pulga eliminada
@@ -194,7 +217,10 @@ public class GameField extends SpriteContainer {
      * juego es una ventana la cierra automáticamente.
      */
     public void finalizarPartida() {
-        this.partidaTerminada = true;
+        this.partidaTerminada = true; // Detener la lógica del juego
+        if (contadorTiempo != null && contadorTiempo.isAlive()) {
+            contadorTiempo.interrupt();  // Detener el hilo correctamente
+        }
         this.sprites.clear();
         this.refresh();
         System.out.println("Partida finalizada.");
@@ -202,6 +228,9 @@ public class GameField extends SpriteContainer {
         if (gameContainer instanceof GameWindow) {
             ((GameWindow) gameContainer).terminarPartida();
         }
+    }
+    public void menejarCombustible(){
+        jugador.consumirConbustible();
     }
 
     /**
@@ -216,12 +245,13 @@ public class GameField extends SpriteContainer {
      * pantalla para mostrar los cambios.
      */
     public void update() {
-        jugador.consumirConbustible();
-        if (jugador.getCantidadVidas() <= 0 || jugador.getMoto().estaSinCombustible()) {
+        
+        if (jugador.getCantidadVidas() <= 0 || jugador.getMoto().isEstaSinConbustible()) {
             finalizarPartida();
             return;
         }
         //Mover obstaculos, monedas y demás elementos hacia abajo (simulando avance)
+        // 1. Mover obstáculos, monedas y demás elementos hacia abajo (simulando avance)
         for (int i = 0; i < sprites.size(); i++) {
             Sprite sprite = sprites.get(i);
             if (sprite instanceof ElementType) {
@@ -255,6 +285,10 @@ public class GameField extends SpriteContainer {
         // Dibuja dos veces la imagen para rellenar todo el panel
         g.drawImage(fondo, 0, y1, getWidth(), fondoAlto, null);
         g.drawImage(fondo, 0, y1 + fondoAlto, getWidth(), fondoAlto, null);
+        if (!partidaTerminada) {
+            g.setColor(Color.WHITE);
+            g.drawString("Puntaje: " + jugador.getPuntaje(), 10, 20);
+        }
 
         // Copiar la lista para evitar problemas de concurrencia
         List<Sprite> copiaSprites = new ArrayList<>(sprites);

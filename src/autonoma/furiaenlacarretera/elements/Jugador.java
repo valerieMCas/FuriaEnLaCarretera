@@ -100,7 +100,7 @@ public class Jugador extends Sprite {
 
     public void consumirConbustible() {
         if (moto != null) {
-            moto.consumirCombustible();
+            moto.disminuirCombustible();
         }
     }
 
@@ -131,5 +131,6 @@ public class Jugador extends Sprite {
                 break;
         }
     }
+    
 
 }
