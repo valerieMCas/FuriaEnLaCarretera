@@ -16,8 +16,8 @@ import java.util.Random;
  */
 public class Person extends ElementType {
 
-    public static final int WIDTH_PERSON = 48;
-    public static final int HEIGH_PERSON = 80;
+    public static final int WIDTH_PERSON = 38;
+    public static final int HEIGH_PERSON = 60;
 
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;

@@ -15,8 +15,8 @@ import java.util.Random;
  */
 public class Car extends ElementType {
 
-    public static final int WIDTH_CAR = 38;
-    public static final int HEIGH_CAR = 60;
+    public static final int WIDTH_CAR = 18;
+    public static final int HEIGH_CAR = 20;
 
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;

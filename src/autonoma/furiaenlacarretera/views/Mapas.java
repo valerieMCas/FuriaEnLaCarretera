@@ -113,8 +113,11 @@ public class Mapas extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelMapa.add(panelMapa1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 170, -1));
+        panelMapa.add(panelMapa1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 170, -1));
 
+        panelMapa2.setBackground(new java.awt.Color(0, 0, 0));
+
+        labelMapa2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/autonoma/furiaenlacarretera/images/mapa2inicio.jpg"))); // NOI18N
         labelMapa2.setText("ddd");
         labelMapa2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -128,17 +131,18 @@ public class Mapas extends JFrame {
             panelMapa2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMapa2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelMapa2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(labelMapa2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelMapa2Layout.setVerticalGroup(
             panelMapa2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMapa2Layout.createSequentialGroup()
-                .addComponent(labelMapa2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(labelMapa2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelMapa.add(panelMapa2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 120, 100));
+        panelMapa.add(panelMapa2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 90, 170, 110));
 
         labelMapaFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/autonoma/furiaenlacarretera/images/LabelMapas.gif"))); // NOI18N
         labelMapaFondo.setToolTipText("");
@@ -175,10 +179,10 @@ public class Mapas extends JFrame {
     }//GEN-LAST:event_panelPlayMouseClicked
 
     private void labelMapa2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelMapa2MouseClicked
-        mapaSeleccionado = "mapa.jpeg";
+        mapaSeleccionado = "mapa2.jpg";
         Random rand = new Random();
         Color randomColor = new Color(0, 153, 51);
-        panelMapa1.setBackground(randomColor);
+        panelMapa2.setBackground(randomColor);
     }//GEN-LAST:event_labelMapa2MouseClicked
     /**
      * Este método inicializa y configura el juego al hacer clic en el botón
