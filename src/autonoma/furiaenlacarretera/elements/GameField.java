@@ -7,6 +7,7 @@ import gamebase.elements.LectorArchivoTextoPlano;
 import gamebase.elements.Sprite;
 import gamebase.elements.SpriteContainer;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -35,12 +36,12 @@ public class GameField extends SpriteContainer {
     private Jugador jugador;
     private int offsetX = 0;
     private int offsetY = 0;
-    private static final int movimineto = 5;
+    private static int movimiento = 5;
     private boolean partidaTerminada = false;
     private Timer gameTimer;
     private Thread contadorTiempo;
     private Thread ponerGasolina;
-
+    private int monedas = 3;
     private int maxScore = 0;
 
     public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
@@ -213,7 +214,7 @@ public class GameField extends SpriteContainer {
         });
         contadorTiempo.start();
     }
-    public void iniciarGasolina() {
+    public Thread iniciarGasolina() {
         ponerGasolina = new Thread(() -> {
             while (!partidaTerminada) {
                 try {
@@ -228,6 +229,7 @@ public class GameField extends SpriteContainer {
             }
         });
         ponerGasolina.start();
+        return ponerGasolina;
     }
     public void eliminarElement(ElementType element) {
         // Aumenta el puntaje del jugador por cada pulga eliminada
@@ -247,10 +249,19 @@ public class GameField extends SpriteContainer {
         if (contadorTiempo != null && contadorTiempo.isAlive()) {
             contadorTiempo.interrupt();  // Detener el hilo correctamente
         }
+        Thread hiloCombustible = jugador.consumirConbustible();
+        if (hiloCombustible != null && hiloCombustible.isAlive()) {
+            hiloCombustible.interrupt(); // Detener el hilo correctamente
+        }
+
+        Thread hiloGasolina = iniciarGasolina();
+        if (hiloGasolina != null && hiloGasolina.isAlive()) {
+            hiloGasolina.interrupt(); // Detener el hilo correctamente
+        }
+
         this.sprites.clear();
         this.refresh();
         System.out.println("Partida finalizada.");
-
         if (gameContainer instanceof GameWindow) {
             ((GameWindow) gameContainer).terminarPartida();
         }
@@ -284,7 +295,7 @@ public class GameField extends SpriteContainer {
             if (sprite instanceof ElementType) {
                 ElementType element = (ElementType) sprite;
 
-                element.setY(element.getY() + movimineto);
+                element.setY(element.getY() + movimiento);
 
                 // Elimina el elemento si ya pasó la parte inferior del campo
                 if (element.getY() > height) {
@@ -293,7 +304,21 @@ public class GameField extends SpriteContainer {
             }
         }
         // Movimiento automático del fondo
-        offsetY -= movimineto;
+        Thread acelerador = new Thread(() -> {
+            while (jugando) {
+                try {
+                    Thread.sleep(6000); // cada 15 segundos
+                    if (movimiento < 15) {
+                        movimiento++; // acelera el fondo
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        acelerador.start();
+
+        offsetY -= movimiento;
         if (offsetY <= 0) {
             offsetY = getImage().getHeight(null);
         }
@@ -321,8 +346,12 @@ public class GameField extends SpriteContainer {
                         }
                     } else if (element instanceof Currency) {
                         // Podrías sumar puntos o combustible, si quieres
+                        monedas+=1;
                         sprites.remove(element);
-                    } else {
+                    } else if(element instanceof Gasolina){
+                        jugador.recargarConbustible(monedas);
+                    }
+                    else {
                         System.out.println("ERROR: GameField.processCollisionMotorbike. Tipo desconocido de ElementType");
                     }
                 }
@@ -343,8 +372,9 @@ public class GameField extends SpriteContainer {
         g.drawImage(fondo, 0, y1, getWidth(), fondoAlto, null);
         g.drawImage(fondo, 0, y1 + fondoAlto, getWidth(), fondoAlto, null);
         if (!partidaTerminada) {
-            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
             g.drawString("Puntaje: " + jugador.getPuntaje(), 10, 20);
+            g.drawString("Vidas: " + jugador.getCantidadVidas(), 10, 45); 
         }
 
         // Copiar la lista para evitar problemas de concurrencia

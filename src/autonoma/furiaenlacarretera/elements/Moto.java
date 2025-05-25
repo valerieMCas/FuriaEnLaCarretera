@@ -55,7 +55,7 @@ public class Moto {
     /**
      * metodo de disminuir comburtible
      */
-    public void disminuirCombustible() {
+    public Thread disminuirCombustible() {
         contadorGasolina = new Thread(()->{
             while (!estaSinConbustible){
                 try {
@@ -73,6 +73,7 @@ public class Moto {
             }
         });
         contadorGasolina.start();
+        return contadorGasolina;
     }
 
     /**
@@ -80,8 +81,9 @@ public class Moto {
      */
     public void recargarCombustible(int cantidad){
         if (cantidad == 5) {
-            fuel=100;
-            estaSinConbustible = true;
+            this.fuel=100;
+            estaSinConbustible = false;
+            disminuirCombustible();
         }
     }
 }

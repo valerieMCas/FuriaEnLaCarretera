@@ -6,6 +6,7 @@ package autonoma.furiaenlacarretera.elements;
 
 import static autonoma.furiaenlacarretera.elements.Car.HEIGH_CAR;
 import static autonoma.furiaenlacarretera.elements.Car.WIDTH_CAR;
+import com.sun.source.tree.Tree;
 import gamebase.elements.GraphicContainer;
 import gamebase.elements.Sprite;
 import java.awt.Graphics;
@@ -48,6 +49,7 @@ public class Jugador extends Sprite {
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
     private static final int STEP = 5;
+    Thread hilo;
 
     /**
      * constructor
@@ -98,10 +100,11 @@ public class Jugador extends Sprite {
         this.puntaje += score;
     }
 
-    public void consumirConbustible() {
+    public Thread consumirConbustible() {
         if (moto != null) {
-            moto.disminuirCombustible();
+            hilo=moto.disminuirCombustible();
         }
+        return hilo;
     }
 
     public void recargarConbustible(int cantindad) {
