@@ -33,7 +33,7 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         gameField = g;
         setUndecorated(true);
         initComponents();
-
+        reiniciarPartida();
         this.setLocationRelativeTo(null);
 
         this.setSize(_WIDTH, _HEIGHT);
@@ -65,12 +65,17 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         }
 
     }
-
+    public void inicioPartida(){
+        
+    }
     private void reiniciarPartida() {
         gameField.getSprites().clear();
         gameField.setPartidaTerminada(false);
         gameField.addJugador();
         gameField.refresh();
+        gameField.iniciarContadorTiempo();
+        gameField.menejarCombustible();
+        gameField.iniciarGasolina();
     }
 
     public void terminarPartida() {

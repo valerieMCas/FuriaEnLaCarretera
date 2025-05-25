@@ -6,17 +6,23 @@ import gamebase.elements.EscritorArchivoTextoPlano;
 import gamebase.elements.LectorArchivoTextoPlano;
 import gamebase.elements.Sprite;
 import gamebase.elements.SpriteContainer;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
@@ -33,9 +39,12 @@ public class GameField extends SpriteContainer {
     private Police police;
     private int offsetX = 0;
     private int offsetY = 0;
-    private static final int movimineto = 5;
+    private static int movimiento = 5;
     private boolean partidaTerminada = false;
-
+    private Timer gameTimer;
+    private Thread contadorTiempo;
+    private Thread ponerGasolina;
+    private int monedas = 3;
     private int maxScore = 0;
 
     public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
@@ -100,6 +109,41 @@ public class GameField extends SpriteContainer {
         if (intentos == intentosMaximos) {
             System.out.println("No se pudo colocar el carro sin superposición tras " + intentosMaximos + " intentos.");
         }
+    }
+
+    /**
+     * Metodo para agregar la gasolina a la pista
+     */
+    public void addGasolina() {
+        int minX = 165; // Por ejemplo, límite izquierdo del carril
+        int maxX = 360;
+        int width = 50; // tamaño estimado, ajusta según tu sprite
+        int height = 50;
+        int intentosMaximos = 100;
+        int intentos = 0;
+
+        int jugadorY = jugador != null ? jugador.getY() : getHeight();
+
+        while (intentos < intentosMaximos) {
+            int x = minX + (int) (Math.random() * (maxX - minX - width));
+            int y = (int) (Math.random() * (jugadorY - height - 50));
+
+            Rectangle nuevoRect = new Rectangle(x, y, width, height);
+
+            if (!hayColision(nuevoRect)) {
+                Gasolina gasolina = new Gasolina(x, y, width, height, this);
+                this.sprites.add(gasolina);
+                System.out.println("Gasolina agregada en (" + x + ", " + y + ")");
+                break;
+            }
+
+            intentos++;
+        }
+
+        if (intentos == intentosMaximos) {
+            System.out.println("No se pudo colocar la gasolina sin superposición tras " + intentosMaximos + " intentos.");
+        }
+
     }
 
     /**
@@ -183,6 +227,42 @@ public class GameField extends SpriteContainer {
         }
     }
 
+    public void iniciarContadorTiempo() {
+        contadorTiempo = new Thread(() -> {
+            while (!partidaTerminada) {
+                try {
+                    Thread.sleep(2000);
+                    if (jugador != null) {
+                        jugador.aumentarPuntaje(1);
+                        System.out.println("Puntaje: " + jugador.getPuntaje());
+                        refresh();
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        contadorTiempo.start();
+    }
+
+    public Thread iniciarGasolina() {
+        ponerGasolina = new Thread(() -> {
+            while (!partidaTerminada) {
+                try {
+                    Thread.sleep(20000); // 20 segundos
+                    if (!partidaTerminada) {
+                        addGasolina();
+                        refresh();
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        ponerGasolina.start();
+        return ponerGasolina;
+    }
+
     public void eliminarElement(ElementType element) {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
@@ -240,14 +320,30 @@ public class GameField extends SpriteContainer {
      * juego es una ventana la cierra automáticamente.
      */
     public void finalizarPartida() {
-        this.partidaTerminada = true;
+        this.partidaTerminada = true; // Detener la lógica del juego
+        if (contadorTiempo != null && contadorTiempo.isAlive()) {
+            contadorTiempo.interrupt();  // Detener el hilo correctamente
+        }
+        Thread hiloCombustible = jugador.consumirConbustible();
+        if (hiloCombustible != null && hiloCombustible.isAlive()) {
+            hiloCombustible.interrupt(); // Detener el hilo correctamente
+        }
+
+        Thread hiloGasolina = iniciarGasolina();
+        if (hiloGasolina != null && hiloGasolina.isAlive()) {
+            hiloGasolina.interrupt(); // Detener el hilo correctamente
+        }
+
         this.sprites.clear();
         this.refresh();
         System.out.println("Partida finalizada.");
-
         if (gameContainer instanceof GameWindow) {
             ((GameWindow) gameContainer).terminarPartida();
         }
+    }
+
+    public void menejarCombustible() {
+        jugador.consumirConbustible();
     }
 
     /**
@@ -262,20 +358,20 @@ public class GameField extends SpriteContainer {
      * pantalla para mostrar los cambios.
      */
     public void update() {
-//        if (jugador != null) {
-//            jugador.consumirConbustible();
-//            if (jugador.getCantidadVidas() <= 0 || jugador.getMoto().estaSinCombustible()) {
-//                finalizarPartida();
-//                return;
-//            }
-//        }
+
+        if (jugador.getCantidadVidas() <= 0 || jugador.getMoto().isEstaSinConbustible()) {
+            finalizarPartida();
+            return;
+        }
+
         //Mover obstaculos, monedas y demás elementos hacia abajo (simulando avance)
+        // 1. Mover obstáculos, monedas y demás elementos hacia abajo (simulando avance)
         for (int i = 0; i < sprites.size(); i++) {
             Sprite sprite = sprites.get(i);
             if (sprite instanceof ElementType && !(sprite instanceof Police)) {
                 ElementType element = (ElementType) sprite;
 
-                element.setY(element.getY() + movimineto);
+                element.setY(element.getY() + movimiento);
 
                 // Elimina el elemento si ya pasó la parte inferior del campo
                 if (element.getY() > height) {
@@ -284,7 +380,21 @@ public class GameField extends SpriteContainer {
             }
         }
         // Movimiento automático del fondo
-        offsetY -= movimineto;
+        Thread acelerador = new Thread(() -> {
+            while (jugando) {
+                try {
+                    Thread.sleep(6000); // cada 15 segundos
+                    if (movimiento < 15) {
+                        movimiento++; // acelera el fondo
+                    }
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        acelerador.start();
+
+        offsetY -= movimiento;
         if (offsetY <= 0) {
             offsetY = getImage().getHeight(null);
         }
@@ -296,24 +406,44 @@ public class GameField extends SpriteContainer {
     }
 
     private void processCollisionMotorbike() {
-        List<Sprite> copiaSprites = new ArrayList<>(sprites);  // Copiamos para evitar problemas de concurrencia
+        List<Sprite> copiaSprites = new ArrayList<>(sprites);  // Copia para evitar ConcurrentModificationException
 
         for (Sprite s : copiaSprites) {
             if (s instanceof ElementType) {
                 ElementType element = (ElementType) s;
 
                 if (jugador.checkCollision(element)) {
-                    if (element instanceof Car) {
+                    if (element instanceof Car || element instanceof Person) {
+                        // Reducir vida al colisionar con Car o Person
+                        jugador.eliminarVida();
+
+                        // Eliminar el elemento tras la colisión
                         sprites.remove(element);
+
+                        // Verificar si el jugador se quedó sin vidas
+                        if (jugador.getCantidadVidas() <= 0) {
+                            finalizarPartida();
+                            return;
+                        }
+
+                        // Añadir policía tras chocar con Car o Person
                         addPolice();
                         TrollCaughtProcess();
-                    } else if (element instanceof Person) {
-                        sprites.remove(element);
-                        addPolice();
+
                     } else if (element instanceof Currency) {
+                        // Sumar monedas y eliminar moneda
+                        monedas += 1;
                         sprites.remove(element);
+
+                    } else if (element instanceof Gasolina) {
+                        // Recargar combustible con las monedas acumuladas
+                        jugador.recargarConbustible(monedas);
+                        // Asumo que quieres vaciar las monedas después
+                        monedas = 0;
+                        sprites.remove(element);
+
                     } else {
-                        System.out.println("ERROR: GameField.processCollisionMotorbike. Unknown type of ElementType");
+                        System.out.println("ERROR: GameField.processCollisionMotorbike. Tipo desconocido de ElementType");
                     }
                 }
             }
@@ -331,6 +461,11 @@ public class GameField extends SpriteContainer {
         // Dibuja dos veces la imagen para rellenar todo el panel
         g.drawImage(fondo, 0, y1, getWidth(), fondoAlto, null);
         g.drawImage(fondo, 0, y1 + fondoAlto, getWidth(), fondoAlto, null);
+        if (!partidaTerminada) {
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.drawString("Puntaje: " + jugador.getPuntaje(), 10, 20);
+            g.drawString("Vidas: " + jugador.getCantidadVidas(), 10, 45);
+        }
 
         // Copiar la lista para evitar problemas de concurrencia
         List<Sprite> copiaSprites = new ArrayList<>(sprites);
