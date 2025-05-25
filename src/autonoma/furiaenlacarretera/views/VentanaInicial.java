@@ -6,12 +6,15 @@ import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Kamii
  */
 public class VentanaInicial extends JFrame {
+
+    private String mapaSeleccionado;
 
     /**
      * Creates new form VentanaInicial
@@ -40,7 +43,7 @@ public class VentanaInicial extends JFrame {
     private void initComponents() {
 
         panelPrincipal = new javax.swing.JPanel();
-        panelPlay = new javax.swing.JPanel();
+        panelContinuar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         imgPirncipal = new javax.swing.JLabel();
 
@@ -60,34 +63,33 @@ public class VentanaInicial extends JFrame {
         });
         panelPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelPlay.setBackground(new java.awt.Color(201, 88, 105));
-        panelPlay.addMouseListener(new java.awt.event.MouseAdapter() {
+        panelContinuar.setBackground(new java.awt.Color(201, 88, 105));
+        panelContinuar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                panelPlayMouseClicked(evt);
+                panelContinuarMouseClicked(evt);
             }
         });
 
         jLabel1.setBackground(new java.awt.Color(201, 88, 105));
         jLabel1.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
-        jLabel1.setText("PLAY!");
+        jLabel1.setText("CONTINUAR");
 
-        javax.swing.GroupLayout panelPlayLayout = new javax.swing.GroupLayout(panelPlay);
-        panelPlay.setLayout(panelPlayLayout);
-        panelPlayLayout.setHorizontalGroup(
-            panelPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPlayLayout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+        javax.swing.GroupLayout panelContinuarLayout = new javax.swing.GroupLayout(panelContinuar);
+        panelContinuar.setLayout(panelContinuarLayout);
+        panelContinuarLayout.setHorizontalGroup(
+            panelContinuarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelContinuarLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 12, Short.MAX_VALUE))
         );
-        panelPlayLayout.setVerticalGroup(
-            panelPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPlayLayout.createSequentialGroup()
+        panelContinuarLayout.setVerticalGroup(
+            panelContinuarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelContinuarLayout.createSequentialGroup()
                 .addGap(0, 1, Short.MAX_VALUE)
                 .addComponent(jLabel1))
         );
 
-        panelPrincipal.add(panelPlay, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, -1));
+        panelPrincipal.add(panelContinuar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, -1));
 
         imgPirncipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/autonoma/furiaenlacarretera/images/furia_en_la_carretera_500px.gif"))); // NOI18N
         panelPrincipal.add(imgPirncipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 270));
@@ -110,9 +112,10 @@ public class VentanaInicial extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void panelPlayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelPlayMouseClicked
-        iniciarJuego();
-    }//GEN-LAST:event_panelPlayMouseClicked
+    private void panelContinuarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelContinuarMouseClicked
+        Mapas ventana = new Mapas();
+        ventana.setVisible(true);
+    }//GEN-LAST:event_panelContinuarMouseClicked
 
     private void panelPrincipalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_panelPrincipalKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_Q) {
@@ -125,37 +128,12 @@ public class VentanaInicial extends JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_formKeyPressed
-    /**
-     * Este método inicializa y configura el juego al hacer clic en el botón
-     * "JUGAR". Crea una nueva instancia de los objetos necesarios para iniciar
-     * la partida, configura la ventana de juego y muestra el campo de batalla
-     * con el jugador. Después de iniciar el juego, cierra la ventana de inicio.
-     */
-    private void iniciarJuego() {
-        ReproducirSonido.detener();
-        this.dispose();
-        GameField gameField = new GameField(0, 0, 500, 500);
-        gameField.addJugador();
 
-        //Player player = new Player(armaInicial, 100, 100, 50, 50);
-        //gameField.setPlayer(player);
-        GameWindow window = new GameWindow(gameField);
-        gameField.setGraphicContainer(window);
-
-        window.setSize(500, 500);
-        window.setTitle("Furia en la carretera");
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
-        RefreshProgram gameLoop = new RefreshProgram(gameField, window);
-        gameLoop.start();
-
-        this.dispose();
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel imgPirncipal;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel panelPlay;
+    private javax.swing.JPanel panelContinuar;
     private javax.swing.JPanel panelPrincipal;
     // End of variables declaration//GEN-END:variables
 }

@@ -36,9 +36,9 @@ public class GameField extends SpriteContainer {
 
     private int maxScore = 0;
 
-    public GameField(int x, int y, int height, int width) {
+    public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
         super(x, y, height, width);
-        setImage("mapa.jpeg");
+        setImage(mapaSeleccionado);
     }
 
     /**
@@ -132,33 +132,9 @@ public class GameField extends SpriteContainer {
         this.sprites.add(jugador);
     }
 
-    /**
-     * Metodo para agregar el cono a la pista
-     */
-    public void addCone() {
-
-        int minX = 165;
-        int maxX = 360;
-
-        int intentos = 0;
-        int maxIntentos = 50;
-        int jugadorY = jugador != null ? jugador.getY() : getHeight();
-        while (intentos < maxIntentos) {
-            int xt = minX + (int) (Math.random() * (maxX - minX - Cone.WIDTH_CONE));
-            int yt = (int) (Math.random() * (jugadorY - HEIGHT - 50));
-
-            Rectangle nuevoRect = new Rectangle(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE);
-            if (!hayColision(nuevoRect)) {
-                Cone cone = new Cone(xt, yt, Cone.WIDTH_CONE, Cone.HEIGH_CONE, this);
-                add(cone);
-                break;
-            }
-            intentos++;
-        }
-    }
 
     /**
-     * Metodo para agregar el carro a la pista
+     * Metodo para agregar la moneda a la pista
      */
     public void addCurrency() {
         int minX = 165;
@@ -185,6 +161,7 @@ public class GameField extends SpriteContainer {
         // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
     }
+
     /**
      * Finaliza la partida actual.
      *
@@ -216,11 +193,13 @@ public class GameField extends SpriteContainer {
      * pantalla para mostrar los cambios.
      */
     public void update() {
-        jugador.consumirConbustible();
-        if (jugador.getCantidadVidas() <= 0 || jugador.getMoto().estaSinCombustible()) {
-            finalizarPartida();
-            return;
-        }
+//        if (jugador != null) {
+//            jugador.consumirConbustible();
+//            if (jugador.getCantidadVidas() <= 0 || jugador.getMoto().estaSinCombustible()) {
+//                finalizarPartida();
+//                return;
+//            }
+//        }
         //Mover obstaculos, monedas y demás elementos hacia abajo (simulando avance)
         for (int i = 0; i < sprites.size(); i++) {
             Sprite sprite = sprites.get(i);

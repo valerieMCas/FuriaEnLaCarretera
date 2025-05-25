@@ -40,14 +40,9 @@ public class RefreshProgram implements Runnable {
             personSpawnTimer += 30;
             currencySpawnTimer += 30;
 
-            if (carSpawnTimer >= 1000) {  // cada 1 segundo
+            if (carSpawnTimer >= 2000) {  // cada 1 segundo
                 gameField.addCar();
                 carSpawnTimer = 0;
-            }
-
-            if (coneSpawnTimer >= 2000) {  // cada 2 segundos
-                gameField.addCone();
-                coneSpawnTimer = 0;
             }
             if (personSpawnTimer >= 5000) {  // cada 5 segundos
                 gameField.addPerson();

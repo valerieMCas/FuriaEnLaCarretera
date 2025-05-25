@@ -110,14 +110,7 @@ public class Jugador extends Sprite {
 
     public void mover(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-                setY(getY() - STEP);
-                break;
-
-            case KeyEvent.VK_DOWN:
-                setY(getY() + STEP);
-                break;
-
+            
             case KeyEvent.VK_LEFT:
                 if (getX() - STEP >= 165) {
                     setX(getX() - STEP);
