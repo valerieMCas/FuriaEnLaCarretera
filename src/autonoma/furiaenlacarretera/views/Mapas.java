@@ -8,6 +8,7 @@ import autonoma.furiaenlacarretera.elements.GameField;
 import autonoma.furiaenlacarretera.elements.RefreshProgram;
 import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -49,10 +50,22 @@ public class Mapas extends JFrame {
         labelMapa1 = new javax.swing.JLabel();
         panelMapa2 = new javax.swing.JPanel();
         labelMapa2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         labelMapaFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
+        panelMapa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                panelMapaKeyPressed(evt);
+            }
+        });
         panelMapa.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelPlay.setBackground(new java.awt.Color(0, 0, 0));
@@ -72,15 +85,15 @@ public class Mapas extends JFrame {
             panelPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelPlayLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelPlayLayout.setVerticalGroup(
             panelPlayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        panelMapa.add(panelPlay, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 250, 80, 30));
+        panelMapa.add(panelPlay, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 250, 80, 30));
 
         jLabel2.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(153, 255, 153));
@@ -109,11 +122,11 @@ public class Mapas extends JFrame {
             panelMapa1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMapa1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelMapa1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelMapa1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelMapa.add(panelMapa1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 170, -1));
+        panelMapa.add(panelMapa1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 170, 160));
 
         panelMapa2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -138,25 +151,47 @@ public class Mapas extends JFrame {
             panelMapa2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMapa2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(labelMapa2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelMapa2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelMapa.add(panelMapa2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 90, 170, 110));
+        panelMapa.add(panelMapa2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 170, 160));
+
+        jLabel1.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(153, 255, 153));
+        jLabel1.setText("Turbo Solar");
+        panelMapa.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial Black", 3, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(153, 255, 153));
+        jLabel4.setText("Nox Turbo");
+        jLabel4.setToolTipText("");
+        panelMapa.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, -1, -1));
 
         labelMapaFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/autonoma/furiaenlacarretera/images/LabelMapas.gif"))); // NOI18N
         labelMapaFondo.setToolTipText("");
-        panelMapa.add(labelMapaFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        labelMapaFondo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                labelMapaFondoKeyPressed(evt);
+            }
+        });
+        panelMapa.add(labelMapaFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, -10, 500, 300));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelMapa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(panelMapa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelMapa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(panelMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -184,6 +219,20 @@ public class Mapas extends JFrame {
         Color randomColor = new Color(0, 153, 51);
         panelMapa2.setBackground(randomColor);
     }//GEN-LAST:event_labelMapa2MouseClicked
+
+    private void labelMapaFondoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_labelMapaFondoKeyPressed
+
+    }//GEN-LAST:event_labelMapaFondoKeyPressed
+
+    private void panelMapaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_panelMapaKeyPressed
+
+    }//GEN-LAST:event_panelMapaKeyPressed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_Q) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_formKeyPressed
     /**
      * Este método inicializa y configura el juego al hacer clic en el botón
      * "JUGAR". Crea una nueva instancia de los objetos necesarios para iniciar
@@ -213,8 +262,10 @@ public class Mapas extends JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel labelMapa1;
     private javax.swing.JLabel labelMapa2;
     private javax.swing.JLabel labelMapaFondo;
