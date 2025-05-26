@@ -46,6 +46,8 @@ public class GameField extends SpriteContainer {
     private Thread contadorTiempo;
     private Thread ponerGasolina;
     private int maxScore = 0;
+    private String mensajePantalla = "";
+    private long tiempoMensaje = 0;
 
     public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
         super(x, y, height, width);
@@ -446,11 +448,12 @@ public class GameField extends SpriteContainer {
                         int cantidadMonedas =jugador.getMonedas();
                         if (cantidadMonedas >= 5) {
                             jugador.recargarConbustible(cantidadMonedas);
-                            System.out.println("Se reinicio");
                             cantidadMonedas-=5;
                             jugador.setMonedas(cantidadMonedas); 
                         } else {
-                            System.out.println("No tienes suficientes monedas para recargar gasolina.");
+                            mensajePantalla = "Monedas insuficientes, no se recarga.";
+                            tiempoMensaje = System.currentTimeMillis(); //
+                            repaint();
                         }
                         sprites.remove(element);
                     } else {
@@ -478,7 +481,14 @@ public class GameField extends SpriteContainer {
             g.drawString("Vidas: " + jugador.getCantidadVidas(), 10, 45);
             g.drawString("Gasolina: " + jugador.getMoto().getFuel(), 10, 70);
             g.drawString("Monedas: " + jugador.getMonedas(), 10, 90);
-            
+            if (!mensajePantalla.isEmpty()) {
+                long ahora = System.currentTimeMillis();
+                if (ahora - tiempoMensaje < 3000) { 
+                    g.drawString(mensajePantalla, 140, 70); 
+                } else {
+                    mensajePantalla = ""; // borrar mensaje después de 3 segundos
+                }
+            }
         }
 
         // Copiar la lista para evitar problemas de concurrencia
