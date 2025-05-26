@@ -201,6 +201,7 @@ public class GameField extends SpriteContainer {
             intentos++;
         }
     }
+    
 
     public void addPolice() {
         if (this.police == null) {
@@ -288,7 +289,7 @@ public class GameField extends SpriteContainer {
 
         if (dy > 0) {
             moveY = speed; // El police se movera a la derecha
-        } else if (dx < 0) {
+        } else if (dy < 0) {
             moveY = -speed;// El police se movera a la Izquierda
         }
         police.setX(police.getX() + moveX);
@@ -468,6 +469,8 @@ public class GameField extends SpriteContainer {
             g.drawString("Puntaje: " + jugador.getPuntaje(), 10, 20);
             g.drawString("Vidas: " + jugador.getCantidadVidas(), 10, 45);
             g.drawString("Gasolina: " + jugador.getMoto().getFuel(), 10, 70);
+            g.drawString("Monedas: " + monedas, 10, 90);
+            
         }
 
         // Copiar la lista para evitar problemas de concurrencia
