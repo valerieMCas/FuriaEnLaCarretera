@@ -45,7 +45,6 @@ public class GameField extends SpriteContainer {
     private Timer gameTimer;
     private Thread contadorTiempo;
     private Thread ponerGasolina;
-    private int monedas = 3;
     private int maxScore = 0;
 
     public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
@@ -444,10 +443,12 @@ public class GameField extends SpriteContainer {
                         sprites.remove(element);
 
                     } else if (element instanceof Gasolina) {
-                        if (monedas >= 5) {
-                            jugador.recargarConbustible(monedas);
+                        int cantidadMonedas =jugador.getMonedas();
+                        if (cantidadMonedas >= 5) {
+                            jugador.recargarConbustible(cantidadMonedas);
                             System.out.println("Se reinicio");
-                            monedas -=5;
+                            cantidadMonedas-=5;
+                            jugador.setMonedas(cantidadMonedas); 
                         } else {
                             System.out.println("No tienes suficientes monedas para recargar gasolina.");
                         }
