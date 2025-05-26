@@ -43,6 +43,7 @@ public class VentanaInicial extends JFrame {
     private void initComponents() {
 
         panelPrincipal = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         panelContinuar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         imgPirncipal = new javax.swing.JLabel();
@@ -62,6 +63,14 @@ public class VentanaInicial extends JFrame {
             }
         });
         panelPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/autonoma/furiaenlacarretera/images/botonIn.png"))); // NOI18N
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+        panelPrincipal.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 40, 40));
 
         panelContinuar.setBackground(new java.awt.Color(201, 88, 105));
         panelContinuar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -92,21 +101,17 @@ public class VentanaInicial extends JFrame {
         panelPrincipal.add(panelContinuar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 230, -1, -1));
 
         imgPirncipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/autonoma/furiaenlacarretera/images/furia_en_la_carretera_500px.gif"))); // NOI18N
-        panelPrincipal.add(imgPirncipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 270));
+        panelPrincipal.add(imgPirncipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 270));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -115,6 +120,7 @@ public class VentanaInicial extends JFrame {
     private void panelContinuarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelContinuarMouseClicked
         Mapas ventana = new Mapas();
         ventana.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_panelContinuarMouseClicked
 
     private void panelPrincipalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_panelPrincipalKeyPressed
@@ -129,10 +135,17 @@ public class VentanaInicial extends JFrame {
         }
     }//GEN-LAST:event_formKeyPressed
 
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        VentanaInstrucciones ventana = new VentanaInstrucciones();
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel2MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel imgPirncipal;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel panelContinuar;
     private javax.swing.JPanel panelPrincipal;
     // End of variables declaration//GEN-END:variables
