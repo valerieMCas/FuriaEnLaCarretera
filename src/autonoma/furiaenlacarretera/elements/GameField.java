@@ -45,7 +45,7 @@ public class GameField extends SpriteContainer {
     private Timer gameTimer;
     private Thread contadorTiempo;
     private Thread ponerGasolina;
-    private int maxScore = 0;
+    public int maxScore = 0;
 
     public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
         super(x, y, height, width);
@@ -77,6 +77,10 @@ public class GameField extends SpriteContainer {
             }
         }
         return false;
+    }
+
+    public Jugador getJugador() {
+        return jugador;
     }
 
     /**

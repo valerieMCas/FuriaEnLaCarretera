@@ -2,13 +2,18 @@ package autonoma.furiaenlacarretera.views;
 
 import autonoma.furiaenlacarretera.elements.GameField;
 import autonoma.furiaenlacarretera.elements.Jugador;
+import autonoma.furiaenlacarretera.elements.Score;
 import gamebase.elements.GraphicContainer;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import static java.awt.image.ImageObserver.HEIGHT;
 import static java.awt.image.ImageObserver.WIDTH;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,6 +29,7 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
     // Double Buffer
     private BufferedImage imagenBuffer;
     private Graphics gImagenBuffer;
+    private int maxScore = 0;
     String[] options = {"Sí", "No"};
 
     /**
@@ -33,6 +39,7 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         gameField = g;
         setUndecorated(true);
         initComponents();
+        cargarMaximo();
         reiniciarPartida();
         this.setLocationRelativeTo(null);
 
@@ -43,6 +50,11 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
                 BufferedImage.TYPE_INT_RGB);
 
         this.gImagenBuffer = this.imagenBuffer.getGraphics();
+    }
+
+    public void setMaxScore(int maxScore) {
+        this.maxScore = maxScore;
+        refresh();
     }
 
     private void manejarFinDePartida() {
@@ -61,13 +73,64 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         if (opcion == javax.swing.JOptionPane.YES_OPTION) {
             reiniciarPartida();
         } else {
+            JOptionPane.showMessageDialog(null, " Gracias por jugar :)");
+            try {
+                // Guardamos el puntaje
+                Score score = new Score("puntajes.txt");
+                int puntajeActual = gameField.getJugador().getPuntaje();
+
+                // Leemos todos los puntajes guardados
+                ArrayList<Integer> puntajes = score.leerPuntajes();
+
+                if (puntajeActual > maxScore) {
+                    score.guardarPuntaje(puntajeActual);
+                    maxScore = puntajeActual;
+                }
+                // Si el puntaje actual es el más alto, actualizamos el puntaje máximo
+                if (!puntajes.isEmpty()) {
+                    int nuevoMax = Collections.max(puntajes);
+                    if (nuevoMax > maxScore) {
+                        maxScore = nuevoMax;
+                    }
+                }
+
+                // Actualizamos la pantalla con el nuevo puntaje máximo
+                this.setMaxScore(gameField.maxScore);
+
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error al guardar puntaje: " + e.getMessage());
+            }
             System.exit(0);
         }
 
     }
-    public void inicioPartida(){
-        
+
+    /**
+     * Carga el puntaje máximo desde un archivo de texto. Este método lee los
+     * puntajes guardados en un archivo llamado "puntajes.txt". Si existen
+     * puntajes, se carga el puntaje máximo, y si no, se establece el máximo
+     * como 0. Si ocurre algún error durante la lectura del archivo, se muestra
+     * un mensaje de error y el puntaje máximo se establece en 0.
+     */
+    private void cargarMaximo() {
+        try {
+            Score score = new Score("puntajes.txt");
+            ArrayList<Integer> puntajes = score.leerPuntajes();
+            if (!puntajes.isEmpty()) {
+                maxScore = Collections.max(puntajes); // Carga el puntaje máximo
+            } else {
+                maxScore = 0;  // Si no hay puntajes, el máximo es 0
+            }
+        } catch (IOException e) {
+            maxScore = 0;  // En caso de error al leer el archivo, el máximo es 0
+            JOptionPane.showMessageDialog(this, "Error al cargar el puntaje máximo: " + e.getMessage());
+        }
     }
+
+    public void inicioPartida() {
+
+    }
+
     private void reiniciarPartida() {
         gameField.getSprites().clear();
         gameField.setPartidaTerminada(false);
@@ -82,9 +145,10 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         manejarFinDePartida();
     }
 
-    public void atrapadoPolice(){
+    public void atrapadoPolice() {
         JOptionPane.showMessageDialog(null, "¡Fuiste atrapado por el policia:( ! Has perdido.");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -118,9 +182,9 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_Q) {
             System.exit(0);
-        }if (evt.getKeyCode() == KeyEvent.VK_LEFT |
-             evt.getKeyCode() == KeyEvent.VK_RIGHT) 
-        {
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT
+                | evt.getKeyCode() == KeyEvent.VK_RIGHT) {
             gameField.keyPressed(evt.getKeyCode());
         }
 
@@ -131,10 +195,10 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         // Pintar el FoodField encima del fondo
         if (gameField != null) {
             gameField.paint(gImagenBuffer);
-//            if (gameField.getPlayer() != null) {
-//                gImagenBuffer.setColor(Color.YELLOW);
-//                gImagenBuffer.drawString("Puntaje: " + gameField.getPlayer().getPuntaje(), 20, 50);
-//            }
+            if (gameField.getJugador() != null) {
+                gImagenBuffer.setColor(Color.YELLOW);
+                gImagenBuffer.drawString("Puntaje Máximo: " + maxScore, 10, 110);
+            }
         }
 
         //dibuja la imagen completa en pantalla
