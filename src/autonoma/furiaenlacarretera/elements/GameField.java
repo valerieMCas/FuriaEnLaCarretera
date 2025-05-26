@@ -249,7 +249,7 @@ public class GameField extends SpriteContainer {
         ponerGasolina = new Thread(() -> {
             while (!partidaTerminada) {
                 try {
-                    Thread.sleep(20000); // 20 segundos
+                    Thread.sleep(7000); // 20 segundos
                     if (!partidaTerminada) {
                         addGasolina();
                         refresh();
@@ -436,12 +436,14 @@ public class GameField extends SpriteContainer {
                         sprites.remove(element);
 
                     } else if (element instanceof Gasolina) {
-                        // Recargar combustible con las monedas acumuladas
-                        jugador.recargarConbustible(monedas);
-                        // Asumo que quieres vaciar las monedas después
-                        monedas = 0;
+                        if (monedas >= 5) {
+                            jugador.recargarConbustible(monedas);
+                            System.out.println("Se reinicio");
+                            monedas -=5;
+                        } else {
+                            System.out.println("No tienes suficientes monedas para recargar gasolina.");
+                        }
                         sprites.remove(element);
-
                     } else {
                         System.out.println("ERROR: GameField.processCollisionMotorbike. Tipo desconocido de ElementType");
                     }
@@ -465,6 +467,7 @@ public class GameField extends SpriteContainer {
             g.setFont(new Font("Arial", Font.BOLD, 20));
             g.drawString("Puntaje: " + jugador.getPuntaje(), 10, 20);
             g.drawString("Vidas: " + jugador.getCantidadVidas(), 10, 45);
+            g.drawString("Gasolina: " + jugador.getMoto().getFuel(), 10, 70);
         }
 
         // Copiar la lista para evitar problemas de concurrencia
