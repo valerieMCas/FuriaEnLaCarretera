@@ -37,6 +37,7 @@ public class GameField extends SpriteContainer {
     private LectorArchivoTextoPlano lector;
     private Jugador jugador;
     private Police police;
+    
     private int offsetX = 0;
     private int offsetY = 0;
     private static int movimiento = 5;
@@ -439,7 +440,7 @@ public class GameField extends SpriteContainer {
 
                     } else if (element instanceof Currency) {
                         // Sumar monedas y eliminar moneda
-                        monedas += 1;
+                        jugador.recogerMoneda(); // acumula monedas en el jugador
                         sprites.remove(element);
 
                     } else if (element instanceof Gasolina) {
@@ -475,7 +476,7 @@ public class GameField extends SpriteContainer {
             g.drawString("Puntaje: " + jugador.getPuntaje(), 10, 20);
             g.drawString("Vidas: " + jugador.getCantidadVidas(), 10, 45);
             g.drawString("Gasolina: " + jugador.getMoto().getFuel(), 10, 70);
-            g.drawString("Monedas: " + monedas, 10, 90);
+            g.drawString("Monedas: " + jugador.getMonedas(), 10, 90);
             
         }
 
