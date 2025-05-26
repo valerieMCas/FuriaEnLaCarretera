@@ -37,6 +37,7 @@ public class GameField extends SpriteContainer {
     private LectorArchivoTextoPlano lector;
     private Jugador jugador;
     private Police police;
+    
     private int offsetX = 0;
     private int offsetY = 0;
     private static int movimiento = 5;
@@ -44,7 +45,6 @@ public class GameField extends SpriteContainer {
     private Timer gameTimer;
     private Thread contadorTiempo;
     private Thread ponerGasolina;
-    private int monedas = 3;
     private int maxScore = 0;
 
     public GameField(int x, int y, int height, int width, String mapaSeleccionado) {
@@ -201,6 +201,7 @@ public class GameField extends SpriteContainer {
             intentos++;
         }
     }
+    
 
     public void addPolice() {
         if (this.police == null) {
@@ -249,7 +250,7 @@ public class GameField extends SpriteContainer {
         ponerGasolina = new Thread(() -> {
             while (!partidaTerminada) {
                 try {
-                    Thread.sleep(20000); // 20 segundos
+                    Thread.sleep(7000); // 20 segundos
                     if (!partidaTerminada) {
                         addGasolina();
                         refresh();
@@ -273,26 +274,32 @@ public class GameField extends SpriteContainer {
         if (police == null || jugador == null) {
             return;
         }
+
         int speed = police.getStep();
 
+        // Movimiento horizontal: seguir al jugador en X
         int dx = jugador.getX() - police.getX();
-        int dy = jugador.getY() - police.getY();
-        int moveX = 0;
-        int moveY = 0;
-
-        if (dx > 0) {
-            moveX = speed; // El police se movera a la derecha
-        } else if (dx < 0) {
-            moveX = -speed;// El police se movera a la Izquierda
+        if (Math.abs(dx) > speed) {
+            if (dx > 0) {
+                police.setX(police.getX() + speed);
+            } else {
+                police.setX(police.getX() - speed);
+            }
         }
 
-        if (dy > 0) {
-            moveY = speed; // El police se movera a la derecha
-        } else if (dx < 0) {
-            moveY = -speed;// El police se movera a la Izquierda
+        // Movimiento vertical: acercarse pero detenerse a cierta distancia
+        int distanciaDeseadaY = 50; // la distancia vertical que debe mantener
+        int objetivoY = jugador.getY() + distanciaDeseadaY;
+        int dy = objetivoY - police.getY();
+        //ice qué tan lejos está verticalmente el policía de su objetivo.
+        if (Math.abs(dy) > speed) {
+            // Solo se mueve si aún no está cerca de la distancia deseada
+            if (dy > 0) {
+                police.setY(police.getY() + speed);
+            } else {
+                police.setY(police.getY() - speed);
+            }
         }
-        police.setX(police.getX() + moveX);
-        police.setY(police.getY() + moveY);
 
     }
 
@@ -432,16 +439,20 @@ public class GameField extends SpriteContainer {
 
                     } else if (element instanceof Currency) {
                         // Sumar monedas y eliminar moneda
-                        monedas += 1;
+                        jugador.recogerMoneda(); // acumula monedas en el jugador
                         sprites.remove(element);
 
                     } else if (element instanceof Gasolina) {
-                        // Recargar combustible con las monedas acumuladas
-                        jugador.recargarConbustible(monedas);
-                        // Asumo que quieres vaciar las monedas después
-                        monedas = 0;
+                        int cantidadMonedas =jugador.getMonedas();
+                        if (cantidadMonedas >= 5) {
+                            jugador.recargarConbustible(cantidadMonedas);
+                            System.out.println("Se reinicio");
+                            cantidadMonedas-=5;
+                            jugador.setMonedas(cantidadMonedas); 
+                        } else {
+                            System.out.println("No tienes suficientes monedas para recargar gasolina.");
+                        }
                         sprites.remove(element);
-
                     } else {
                         System.out.println("ERROR: GameField.processCollisionMotorbike. Tipo desconocido de ElementType");
                     }
@@ -465,6 +476,9 @@ public class GameField extends SpriteContainer {
             g.setFont(new Font("Arial", Font.BOLD, 20));
             g.drawString("Puntaje: " + jugador.getPuntaje(), 10, 20);
             g.drawString("Vidas: " + jugador.getCantidadVidas(), 10, 45);
+            g.drawString("Gasolina: " + jugador.getMoto().getFuel(), 10, 70);
+            g.drawString("Monedas: " + jugador.getMonedas(), 10, 90);
+            
         }
 
         // Copiar la lista para evitar problemas de concurrencia

@@ -80,10 +80,9 @@ public class Moto {
      * metodo de recargar comburtible
      */
     public void recargarCombustible(int cantidad){
-        if (cantidad == 5) {
-            this.fuel=100;
+        if (cantidad >= 5) {
+            this.fuel = 100;
             estaSinConbustible = false;
-            disminuirCombustible();
         }
     }
 }

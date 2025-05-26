@@ -38,6 +38,7 @@ public class Jugador extends Sprite {
      * atributo de instancia de moto
      */
     private Moto moto;
+    private int monedas = 3;
 
     /**
      * atributos de vidas
@@ -82,6 +83,7 @@ public class Jugador extends Sprite {
     public void setCantidadVidas(int cantidadVidas) {
         this.cantidadVidas = cantidadVidas;
     }
+    
 
     public int getPuntaje() {
         return puntaje;
@@ -90,6 +92,19 @@ public class Jugador extends Sprite {
     public void setPuntaje(int score) {
         this.puntaje = score;
     }
+    public void recogerMoneda() {
+        monedas++;
+    }
+    
+
+    public int getMonedas() {
+        return monedas;
+    }
+
+    public void setMonedas(int monedas) {
+        this.monedas = monedas;
+    }
+    
 
     @Override
     public void paint(Graphics g) {

@@ -29,8 +29,8 @@ public class Police extends Sprite implements Runnable {
 
         setImage("police.png");
 
-        this.step = 2;
-        this.delay = 50;
+        this.step = 1;
+        this.delay = 150;
         running = false;
         paused = false;
 
