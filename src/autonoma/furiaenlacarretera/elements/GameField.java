@@ -274,26 +274,32 @@ public class GameField extends SpriteContainer {
         if (police == null || jugador == null) {
             return;
         }
+
         int speed = police.getStep();
 
+        // Movimiento horizontal: seguir al jugador en X
         int dx = jugador.getX() - police.getX();
-        int dy = jugador.getY() - police.getY();
-        int moveX = 0;
-        int moveY = 0;
-
-        if (dx > 0) {
-            moveX = speed; // El police se movera a la derecha
-        } else if (dx < 0) {
-            moveX = -speed;// El police se movera a la Izquierda
+        if (Math.abs(dx) > speed) {
+            if (dx > 0) {
+                police.setX(police.getX() + speed);
+            } else {
+                police.setX(police.getX() - speed);
+            }
         }
 
-        if (dy > 0) {
-            moveY = speed; // El police se movera a la derecha
-        } else if (dy < 0) {
-            moveY = -speed;// El police se movera a la Izquierda
+        // Movimiento vertical: acercarse pero detenerse a cierta distancia
+        int distanciaDeseadaY = 50; // la distancia vertical que debe mantener
+        int objetivoY = jugador.getY() + distanciaDeseadaY;
+        int dy = objetivoY - police.getY();
+        //ice qué tan lejos está verticalmente el policía de su objetivo.
+        if (Math.abs(dy) > speed) {
+            // Solo se mueve si aún no está cerca de la distancia deseada
+            if (dy > 0) {
+                police.setY(police.getY() + speed);
+            } else {
+                police.setY(police.getY() - speed);
+            }
         }
-        police.setX(police.getX() + moveX);
-        police.setY(police.getY() + moveY);
 
     }
 
