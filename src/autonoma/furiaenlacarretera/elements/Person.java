@@ -15,14 +15,23 @@ import java.util.Random;
  * @since 2025-05-20
  */
 public class Person extends ElementType {
-
+    // atributos que definen el tamaño 
     public static final int WIDTH_PERSON = 18;
     public static final int HEIGH_PERSON = 20;
-
+    // Imagen en memoria
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
+    // Cantidad de píxeles que el carro avanza en cada movimiento
     private int paso;
-
+    /**
+    * Constructor de la clase Person.
+    *
+    * @param x 
+    * @param y 
+    * @param width 
+    * @param height 
+    * @param g 
+    */
     public Person(int x, int y, int width, int height, GraphicContainer g) {
         super(x, y, width, height);
         setImage("person.png");
@@ -57,7 +66,7 @@ public class Person extends ElementType {
         }
     }
     /**
-    * Crea y posiciona un objeto de tipo `Person` en el campo de juego.
+    * Crea y posiciona un objeto de tipo Person en el campo de juego.
     *
     * Este método intenta colocar una nueva instancia de `Person` en una posición
     * aleatoria dentro de los límites, evitando que se 
@@ -71,9 +80,9 @@ public class Person extends ElementType {
     * - Si no encuentra una posición válida después de varios intentos, muestra 
     *   un mensaje en consola indicando el fallo.  :)
     *
-    * @param gameField  el campo de juego donde se colocará el nuevo objeto.
-    * @param container  el contenedor gráfico que define los límites de ubicación.
-    * @param rand       generador de números aleatorios para calcular las posiciones.
+    * @param gameField 
+    * @param container 
+    * @param rand       
     */
     public static void create(GameField gameField, GraphicContainer container, Random rand) {
         int intentosMaximos = 100;
