@@ -1,27 +1,18 @@
 package autonoma.furiaenlacarretera.elements;
 
-import autonoma.furiaenlacarretera.elements.Cone;
+import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import autonoma.furiaenlacarretera.views.GameWindow;
 import gamebase.elements.EscritorArchivoTextoPlano;
 import gamebase.elements.LectorArchivoTextoPlano;
 import gamebase.elements.Sprite;
 import gamebase.elements.SpriteContainer;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Timer;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -114,7 +105,7 @@ public class GameField extends SpriteContainer {
         }
 
         if (intentos == intentosMaximos) {
-            System.out.println("No se pudo colocar el carro sin superposición tras " + intentosMaximos + " intentos.");
+            //System.out.println("No se pudo colocar el carro sin superposición tras " + intentosMaximos + " intentos.");
         }
     }
 
@@ -140,7 +131,7 @@ public class GameField extends SpriteContainer {
             if (!hayColision(nuevoRect)) {
                 Gasolina gasolina = new Gasolina(x, y, width, height, this);
                 this.sprites.add(gasolina);
-                System.out.println("Gasolina agregada en (" + x + ", " + y + ")");
+               // System.out.println("Gasolina agregada en (" + x + ", " + y + ")");
                 break;
             }
 
@@ -148,7 +139,7 @@ public class GameField extends SpriteContainer {
         }
 
         if (intentos == intentosMaximos) {
-            System.out.println("No se pudo colocar la gasolina sin superposición tras " + intentosMaximos + " intentos.");
+            //System.out.println("No se pudo colocar la gasolina sin superposición tras " + intentosMaximos + " intentos.");
         }
 
     }
@@ -209,7 +200,9 @@ public class GameField extends SpriteContainer {
         }
     }
     
-
+    /**
+     * Metodo para agregar el policia a la pista
+     */
     public void addPolice() {
         if (this.police == null) {
             // Tomamos la posición X actual del jugador
@@ -222,7 +215,7 @@ public class GameField extends SpriteContainer {
             this.police.setDelay(50);
             this.police.iniciarPersecucion();
             this.sprites.add(police);
-            System.out.println("Policía agregado a la pista");
+            //System.out.println("Policía agregado a la pista");
         }
     }
 
@@ -231,7 +224,7 @@ public class GameField extends SpriteContainer {
             sprites.remove(police);
             police.stop();
             police = null;
-            System.out.println("Policía eliminado ");
+            //System.out.println("Policía eliminado ");
         }
     }
 
@@ -242,7 +235,7 @@ public class GameField extends SpriteContainer {
                     Thread.sleep(2000);
                     if (jugador != null) {
                         jugador.aumentarPuntaje(1);
-                        System.out.println("Puntaje: " + jugador.getPuntaje());
+                        //System.out.println("Puntaje: " + jugador.getPuntaje());
                         refresh();
                     }
                 } catch (InterruptedException e) {
@@ -272,11 +265,12 @@ public class GameField extends SpriteContainer {
     }
 
     public void eliminarElement(ElementType element) {
-        // Aumenta el puntaje del jugador por cada pulga eliminada
         sprites.remove(element);
     }
 
-    //calcula como moverse hacia el gnomo
+    /**
+     * calcula como moverse el policia hacia el jugador
+    */
     public void moverPoliceJugador() {
         if (police == null || jugador == null) {
             return;
@@ -310,7 +304,7 @@ public class GameField extends SpriteContainer {
 
     }
 
-    public void TrollCaughtProcess() {
+    public void PoliceCaughtProcess() {
         for (int i = 0; i < sprites.size(); i++) {
             if (sprites.get(i) instanceof Police) {
                 Police police = (Police) sprites.get(i);
@@ -350,7 +344,7 @@ public class GameField extends SpriteContainer {
 
         this.sprites.clear();
         this.refresh();
-        System.out.println("Partida finalizada.");
+        //System.out.println("Partida finalizada.");
         if (gameContainer instanceof GameWindow) {
             ((GameWindow) gameContainer).terminarPartida();
         }
@@ -428,6 +422,7 @@ public class GameField extends SpriteContainer {
 
                 if (jugador.checkCollision(element)) {
                     if (element instanceof Car || element instanceof Person) {
+                        ReproducirSonido.playRandomEffectSound();
                         // Reducir vida al colisionar con Car o Person
                         jugador.eliminarVida();
 
@@ -442,16 +437,18 @@ public class GameField extends SpriteContainer {
 
                         // Añadir policía tras chocar con Car o Person
                         addPolice();
-                        TrollCaughtProcess();
+                        PoliceCaughtProcess();
 
                     } else if (element instanceof Currency) {
                         // Sumar monedas y eliminar moneda
+                        ((Currency) element).playCurrencySound();
                         jugador.recogerMoneda(); // acumula monedas en el jugador
                         sprites.remove(element);
 
                     } else if (element instanceof Gasolina) {
                         int cantidadMonedas =jugador.getMonedas();
                         if (cantidadMonedas >= 5) {
+                            ((Gasolina) element).playGasolinaSound();
                             jugador.recargarConbustible(cantidadMonedas);
                             cantidadMonedas-=5;
                             jugador.setMonedas(cantidadMonedas); 
@@ -461,9 +458,10 @@ public class GameField extends SpriteContainer {
                             repaint();
                         }
                         sprites.remove(element);
-                    } else {
-                        System.out.println("ERROR: GameField.processCollisionMotorbike. Tipo desconocido de ElementType");
-                    }
+                    } 
+//                    else {
+//                        System.out.println("ERROR: GameField.processCollisionMotorbike. Tipo desconocido de ElementType");
+//                    }
                 }
             }
         }

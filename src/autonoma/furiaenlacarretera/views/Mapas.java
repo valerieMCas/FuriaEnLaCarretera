@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package autonoma.furiaenlacarretera.views;
 
 import autonoma.furiaenlacarretera.elements.GameField;
@@ -9,8 +5,6 @@ import autonoma.furiaenlacarretera.elements.RefreshProgram;
 import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.util.Random;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -29,7 +23,7 @@ public class Mapas extends JFrame {
         setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(null);
-        ReproducirSonido.playSound("sonidoInicio.wav");
+        ReproducirSonido.playSound("sonidoMapas.wav");
 
     }
 
@@ -199,9 +193,8 @@ public class Mapas extends JFrame {
 
     private void labelMapa1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelMapa1MouseClicked
         mapaSeleccionado = "mapa.jpeg";
-        Random rand = new Random();
-        Color randomColor = new Color(0, 153, 51);
-        panelMapa1.setBackground(randomColor);
+        deseleccionarMapas();
+        panelMapa1.setBackground(new Color(0, 153, 51));
 
     }//GEN-LAST:event_labelMapa1MouseClicked
 
@@ -210,14 +203,14 @@ public class Mapas extends JFrame {
             JOptionPane.showMessageDialog(this, "Primero selecciona un mapa");
             return;
         }
+
         iniciarJuego();
     }//GEN-LAST:event_panelPlayMouseClicked
 
     private void labelMapa2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelMapa2MouseClicked
         mapaSeleccionado = "mapa2.jpg";
-        Random rand = new Random();
-        Color randomColor = new Color(0, 153, 51);
-        panelMapa2.setBackground(randomColor);
+        deseleccionarMapas();
+        panelMapa2.setBackground(new Color(0, 153, 51));
     }//GEN-LAST:event_labelMapa2MouseClicked
 
     private void labelMapaFondoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_labelMapaFondoKeyPressed
@@ -233,6 +226,12 @@ public class Mapas extends JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_formKeyPressed
+    private void deseleccionarMapas() {
+        panelMapa1.setBackground(Color.BLACK);
+        panelMapa2.setBackground(Color.BLACK);
+
+    }
+
     /**
      * Este método inicializa y configura el juego al hacer clic en el botón
      * "JUGAR". Crea una nueva instancia de los objetos necesarios para iniciar

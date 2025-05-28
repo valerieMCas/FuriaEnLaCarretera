@@ -2,6 +2,7 @@ package autonoma.furiaenlacarretera.elements;
 
 import static autonoma.furiaenlacarretera.elements.Cone.HEIGH_CONE;
 import static autonoma.furiaenlacarretera.elements.Cone.WIDTH_CONE;
+import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import gamebase.elements.GraphicContainer;
 import gamebase.elements.Sprite;
 import static gamebase.elements.Sprite.jugando;
@@ -18,12 +19,11 @@ import java.util.Random;
 public class Gasolina extends ElementType {
 
     public static final int WIDTH_CURRENCY = 48;
-    public static final int HEIGH_CURRENCY  = 80;
+    public static final int HEIGH_CURRENCY = 80;
 
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
     private int paso;
-
 
     public Gasolina(int x, int y, int height, int width, GraphicContainer g) {
         super(x, y, height, width);
@@ -43,12 +43,13 @@ public class Gasolina extends ElementType {
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
-    
+
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);
         }
     }
+
     public static void create(GameField gameField, GraphicContainer container, Random rand) {
         int intentosMaximos = 100;
         int intentos = 0;
@@ -66,10 +67,10 @@ public class Gasolina extends ElementType {
 
             for (Sprite elemento : gameField.getSprites()) {
                 Rectangle existente = new Rectangle(
-                    elemento.getX(),
-                    elemento.getY(),
-                    elemento.getWidth(),
-                    elemento.getHeight()
+                        elemento.getX(),
+                        elemento.getY(),
+                        elemento.getWidth(),
+                        elemento.getHeight()
                 );
 
                 if (nuevo.intersects(existente)) {
@@ -89,6 +90,7 @@ public class Gasolina extends ElementType {
             System.out.println("No se pudo colocar el cono sin superposición tras " + intentosMaximos + " intentos.");
         }
     }
+
     @Override
     public void update(Graphics g) {
         g.drawImage(imagenBuffer, 0, 0, this);
@@ -171,9 +173,13 @@ public class Gasolina extends ElementType {
         }
     }
 
+    public void playGasolinaSound() {
+        ReproducirSonido.playEffectSound("soundFuel.wav");
+    }
+
     @Override
     public void delete(GameField gameField) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 }
