@@ -62,7 +62,9 @@ public class GameField extends SpriteContainer {
     public List<Sprite> getSprites() {
         return sprites;
     }
-
+    /**
+     * metodo para validar si hay colision
+     */
     private boolean hayColision(Rectangle nuevoRect) {
         for (Sprite sprite : sprites) {
             if (sprite.getBoundaries().intersects(nuevoRect)) {
@@ -71,7 +73,7 @@ public class GameField extends SpriteContainer {
         }
         return false;
     }
-
+    
     public Jugador getJugador() {
         return jugador;
     }
@@ -165,7 +167,9 @@ public class GameField extends SpriteContainer {
             intentos++;
         }
     }
-
+    /**
+     * Metodo para agregar el jugador a la pista
+     */
     public void addJugador() {
         int startX = width / 2 - 25;  // centrado horizontalmente, restando la mitad del ancho del jugador
         int startY = height - 100;    // cerca de la parte inferior
@@ -217,7 +221,9 @@ public class GameField extends SpriteContainer {
             //System.out.println("Policía agregado a la pista");
         }
     }
-
+    /**
+     * Metodo para eliminar el policia a la pista
+     */
     public void eliminarPolice() {
         if (police != null) {
             sprites.remove(police);
@@ -226,7 +232,9 @@ public class GameField extends SpriteContainer {
             //System.out.println("Policía eliminado ");
         }
     }
-
+    /**
+     * Metodo para iniciar el contador del tiempo
+     */
     public void iniciarContadorTiempo() {
         contadorTiempo = new Thread(() -> {
             while (!partidaTerminada) {
@@ -244,7 +252,9 @@ public class GameField extends SpriteContainer {
         });
         contadorTiempo.start();
     }
-
+    /**
+     * Metodo para iniciar la gasolina del jugador
+     */
     public Thread iniciarGasolina() {
         ponerGasolina = new Thread(() -> {
             while (!partidaTerminada) {
@@ -262,7 +272,7 @@ public class GameField extends SpriteContainer {
         ponerGasolina.start();
         return ponerGasolina;
     }
-
+    
     public void eliminarElement(ElementType element) {
         sprites.remove(element);
     }
@@ -291,7 +301,7 @@ public class GameField extends SpriteContainer {
         int distanciaDeseadaY = 50; // la distancia vertical que debe mantener
         int objetivoY = jugador.getY() + distanciaDeseadaY;
         int dy = objetivoY - police.getY();
-        //ice qué tan lejos está verticalmente el policía de su objetivo.
+        //dice qué tan lejos está verticalmente el policía de su objetivo.
         if (Math.abs(dy) > speed) {
             // Solo se mueve si aún no está cerca de la distancia deseada
             if (dy > 0) {
@@ -302,7 +312,9 @@ public class GameField extends SpriteContainer {
         }
 
     }
-
+    /**
+     * metodo que valida si el policia atrapo a el jugador
+     */
     public void PoliceCaughtProcess() {
         for (int i = 0; i < sprites.size(); i++) {
             if (sprites.get(i) instanceof Police) {
