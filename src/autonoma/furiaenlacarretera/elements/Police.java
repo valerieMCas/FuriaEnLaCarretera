@@ -100,7 +100,7 @@ public class Police extends Sprite implements Runnable {
 
             if (gamefield != null) {
                 gamefield.moverPoliceJugador();    // Ya no se mueve aleatorio si no que persigue al jugador automaticamente
-                gamefield.TrollCaughtProcess(); // verifica colision y muestra mensaje
+                gamefield.PoliceCaughtProcess(); // verifica colision y muestra mensaje
                 gamefield.refresh();
             }
             if (System.currentTimeMillis() - tiempoInicio >= duracionPersecucion) {

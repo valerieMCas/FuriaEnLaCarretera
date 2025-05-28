@@ -3,6 +3,7 @@ package autonoma.furiaenlacarretera.views;
 import autonoma.furiaenlacarretera.elements.GameField;
 import autonoma.furiaenlacarretera.elements.Jugador;
 import autonoma.furiaenlacarretera.elements.Score;
+import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import gamebase.elements.GraphicContainer;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -42,6 +43,7 @@ public class GameWindow extends javax.swing.JFrame implements GraphicContainer {
         cargarMaximo();
         reiniciarPartida();
         this.setLocationRelativeTo(null);
+        ReproducirSonido.playSound("sonidoCars.wav");
 
         this.setSize(_WIDTH, _HEIGHT);
 
