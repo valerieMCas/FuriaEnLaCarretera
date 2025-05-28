@@ -9,22 +9,32 @@ import java.awt.Graphics;
  * @author Kamii
  */
 public class Police extends Sprite implements Runnable {
-
+    // atributos que definen el tamaño
     public static final int WIDTH = 40;
     public static final int HEIGHT = 40;
-
+    // Atributo de el delay para el police
     protected long delay;
     private boolean running;
     private boolean paused;
     protected Thread thread;
+    // Cantidad de píxeles que el carro avanza en cada movimiento
     private int step;
+    // tiempo de inicio desde cuando sale
     private long tiempoInicio;
     private long duracionPersecucion = 5000;
     /**Se agrega el gamefield para poder perseguir la moto, saber donde esta  (su refrencia)
     No se hizo en gamefiel porque el movimiento de la moto  ocurre de forma independiente
     */
      private GameField gamefield;
-
+     /**
+     * Constructor de la clase Police.
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param g
+     */
     public Police(int x, int y, int width, int height) {
         super(x, y, width, height);
 
@@ -38,11 +48,17 @@ public class Police extends Sprite implements Runnable {
         thread = new Thread(this);
         thread.start();
     }
-
+    /**
+     * se Crea el metodo para inicira la persecucion del policia.
+     *
+     */
     public void iniciarPersecucion() {
         this.tiempoInicio = System.currentTimeMillis();
     }
-
+    /**
+     * se Crea el metodo para la movilidad de el police
+     *
+     */
     public boolean mover() {
         int direccion = (int) (Math.random() * 4);
 

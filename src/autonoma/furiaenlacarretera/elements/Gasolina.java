@@ -17,14 +17,23 @@ import java.util.Random;
  * @version 1.0.0
  */
 public class Gasolina extends ElementType {
-
+    // atributos que definen el tamaño
     public static final int WIDTH_CURRENCY = 48;
     public static final int HEIGH_CURRENCY = 80;
-
+    // Imagen en memoria
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
+    // Cantidad de píxeles que el carro avanza en cada movimiento
     private int paso;
-
+    /**
+     * Constructor de la clase Gasolina.
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param g
+     */
     public Gasolina(int x, int y, int height, int width, GraphicContainer g) {
         super(x, y, height, width);
         setImage("gasolina.png");
@@ -43,14 +52,35 @@ public class Gasolina extends ElementType {
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
-
+    /**
+     * Registra el sprite actual en el campo de juego.
+     *
+     * Este método agrega la instancia actual (this) a la lista de sprites del
+     * objeto GameField recibido como parámetro. De esta forma, el sprite podrá
+     * ser gestionado y actualizado dentro del ciclo del juego.
+     *
+     * @param gameField el campo de juego donde se desea registrar este sprite.
+     */
     @Override
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);
         }
     }
-
+    /**
+     * Crea y posiciona un objeto de tipo Gasolina en el campo de juego.
+     *
+     * Este método intenta colocar una nueva instancia de `Person` en una
+     * posición aleatoria dentro de los límites, evitando que se superponga con
+     * otros sprites que ya existen. Se realizan varios intentos hasta encontrar
+     * una ubicación libre o alcanzar un número máximo de intentos.
+     *
+     
+     *
+     * @param gameField
+     * @param container
+     * @param rand
+     */
     public static void create(GameField gameField, GraphicContainer container, Random rand) {
         int intentosMaximos = 100;
         int intentos = 0;

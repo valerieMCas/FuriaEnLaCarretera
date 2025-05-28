@@ -71,7 +71,7 @@ public class Currency extends ElementType {
     }
 
     /**
-     * Crea y posiciona un objeto de tipo Person en el campo de juego.
+     * Crea y posiciona un objeto de tipo Currency en el campo de juego.
      *
      * Este método intenta colocar una nueva instancia de `Person` en una
      * posición aleatoria dentro de los límites, evitando que se superponga con

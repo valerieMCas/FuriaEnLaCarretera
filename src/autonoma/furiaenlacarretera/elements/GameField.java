@@ -73,7 +73,7 @@ public class GameField extends SpriteContainer {
         }
         return false;
     }
-    
+     
     public Jugador getJugador() {
         return jugador;
     }
