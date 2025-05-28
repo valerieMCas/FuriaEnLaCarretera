@@ -78,13 +78,7 @@ public class Person extends ElementType {
      * posición aleatoria dentro de los límites, evitando que se superponga con
      * otros sprites que ya existen. Se realizan varios intentos hasta encontrar
      * una ubicación libre o alcanzar un número máximo de intentos.
-     *
-     * - Genera coordenadas aleatorias dentro de los límites del contenedor. -
-     * Verifica que el nuevo objeto no se superponga con ningún sprite
-     * existente. - Si encuentra una posición válida, crea la instancia y la
-     * registra en el campo de juego. - Si no encuentra una posición válida
-     * después de varios intentos, muestra un mensaje en consola indicando el
-     * fallo. :)
+     
      *
      * @param gameField
      * @param container
