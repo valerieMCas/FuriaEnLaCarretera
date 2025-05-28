@@ -6,12 +6,9 @@ import autonoma.furiaenlacarretera.sounds.ReproducirSonido;
 import gamebase.elements.GraphicContainer;
 import gamebase.elements.Sprite;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-import javax.swing.ImageIcon;
-
 /**
  * @author Maria Camila Prada Cortes
  * @version 1.0.0
@@ -66,6 +63,7 @@ public class Currency extends ElementType {
      *
      * @param gameField el campo de juego donde se desea registrar este sprite.
      */
+    @Override
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);

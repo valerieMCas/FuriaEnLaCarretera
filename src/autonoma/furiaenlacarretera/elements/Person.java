@@ -64,6 +64,7 @@ public class Person extends ElementType {
      *
      * @param gameField el campo de juego donde se desea registrar este sprite.
      */
+    @Override
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);

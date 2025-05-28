@@ -405,7 +405,7 @@ public class GameField extends SpriteContainer {
         if (offsetY <= 0) {
             offsetY = getImage().getHeight(null);
         }
-        processCollisionMotorbike();
+        processCollisionMotobike();
         if (police != null) {
             moverPoliceJugador();
         }
@@ -438,7 +438,7 @@ public class GameField extends SpriteContainer {
      * La copia de la lista se utiliza para evitar errores al modificar la
      * colección original durante la iteración.
      */
-    private void processCollisionMotorbike() {
+    private void processCollisionMotobike() {
         List<Sprite> copiaSprites = new ArrayList<>(sprites);  // Copia para evitar ConcurrentModificationException
 
         for (Sprite s : copiaSprites) {
@@ -549,7 +549,7 @@ public class GameField extends SpriteContainer {
                 | code == KeyEvent.VK_RIGHT) {
             if (jugador != null) {
                 jugador.mover(code);
-                processCollisionMotorbike();
+                processCollisionMotobike();
                 refresh();
             }
         }
