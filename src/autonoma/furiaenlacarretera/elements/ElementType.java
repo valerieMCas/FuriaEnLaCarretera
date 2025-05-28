@@ -74,6 +74,12 @@ public abstract class ElementType extends SpriteMobile {
     }
 
     /**
+     * metodo esta diseñado para que cada clase hija defina su propia logica de que hacer
+     * cuando recibe un golpe o colision en el GameField.
+     * @param gameField 
+     */
+    public abstract void registerHitGameField(GameField gameField);
+    /**
      * Método que debe implementar cada tipo de pulga (normal o mutante)
      */
     public abstract void delete(GameField gameField);

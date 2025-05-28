@@ -44,6 +44,7 @@ public class Gasolina extends ElementType {
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
 
+    @Override
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);

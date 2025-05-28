@@ -20,9 +20,10 @@ public class Police extends Sprite implements Runnable {
     private int step;
     private long tiempoInicio;
     private long duracionPersecucion = 5000;
-    //Se agrega el Garden para poder perseguir a el nomo, saber donde esta  (su refrencia)
-    //No se hizo en Garden porque el movimiento del troll ocurre de forma independiente
-    private GameField gamefield;
+    /**Se agrega el gamefield para poder perseguir la moto, saber donde esta  (su refrencia)
+    No se hizo en gamefiel porque el movimiento de la moto  ocurre de forma independiente
+    */
+     private GameField gamefield;
 
     public Police(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -69,7 +70,6 @@ public class Police extends Sprite implements Runnable {
         if (!fueraContenedor(nx, ny)) {
             x = nx;
             y = ny;
-            System.out.println("Me movi");
             if (gameContainer != null) {
                 gameContainer.refresh();
             }
@@ -85,6 +85,7 @@ public class Police extends Sprite implements Runnable {
         g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
+    @Override
     public void run() {
         running = true;
 

@@ -60,6 +60,7 @@ public class Car extends ElementType {
     *
     * @param gameField 
     */
+    @Override
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);
@@ -120,8 +121,6 @@ public class Car extends ElementType {
         if (!seSobrepone) {
             Car carro = new Car(x, y, WIDTH_CAR, HEIGH_CAR, container);
             carro.registerHitGameField(gameField);
-        } else {
-            System.out.println("No se pudo colocar el carro sin superposición tras " + intentosMaximos + " intentos.");
         }
     }
     /**
@@ -211,7 +210,6 @@ public class Car extends ElementType {
         if (!fueraContenedor(nx, ny)) {
             x = nx;
             y = ny;
-            System.out.println("Me movi");
             if (gameContainer != null) {
                 gameContainer.refresh();
             }
