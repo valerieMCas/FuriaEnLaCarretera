@@ -16,15 +16,24 @@ import java.util.Random;
  * @version 1.0.0
  */
 public class Gasolina extends ElementType {
-
+    // atributos que definen el tamaño 
     public static final int WIDTH_CURRENCY = 48;
     public static final int HEIGH_CURRENCY  = 80;
-
+    // Imagen en memoria
     private BufferedImage imagenBuffer;
     private Graphics g_imagenBuffer;
+    // Cantidad de píxeles que el carro avanza en cada movimiento
     private int paso;
 
-
+    /**
+    * Constructor de la clase Gasolina.
+    *
+    * @param x 
+    * @param y 
+    * @param width 
+    * @param height 
+    * @param g 
+    */
     public Gasolina(int x, int y, int height, int width, GraphicContainer g) {
         super(x, y, height, width);
         setImage("gasolina.png");
@@ -43,12 +52,39 @@ public class Gasolina extends ElementType {
         //obtenemos los graficos
         g_imagenBuffer = imagenBuffer.getGraphics();
     }
-    
+    /**
+    * Registra el sprite actual en el campo de juego.
+    *
+    * Este método agrega la instancia actual a la lista de sprites del
+    * objeto GameField recibido como parámetro. De esta forma, el sprite podrá
+    * ser gestionado y actualizado dentro del ciclo del juego.
+    *
+    * @param gameField el campo de juego donde se desea registrar este sprite.
+    */
     public void registerHitGameField(GameField gameField) {
         if (gameField != null) {
             gameField.getSprites().add(this);
         }
     }
+    /**
+    * Crea y posiciona un objeto de tipo Person en el campo de juego.
+    *
+    * Este método intenta colocar una nueva instancia de `Gasolina` en una posición
+    * aleatoria dentro de los límites, evitando que se 
+    * superponga con otros sprites que ya existen. Se realizan varios intentos hasta 
+    * encontrar una ubicación libre o alcanzar un número máximo de intentos.
+    *
+    * - Genera coordenadas aleatorias dentro de los límites del contenedor.
+    * - Verifica que el nuevo objeto no se superponga con ningún sprite existente.
+    * - Si encuentra una posición válida, crea la instancia y la registra en el 
+    *   campo de juego.
+    * - Si no encuentra una posición válida después de varios intentos, muestra 
+    *   un mensaje en consola indicando el fallo.  :)
+    *
+    * @param gameField 
+    * @param container 
+    * @param rand       
+    */
     public static void create(GameField gameField, GraphicContainer container, Random rand) {
         int intentosMaximos = 100;
         int intentos = 0;
@@ -89,25 +125,62 @@ public class Gasolina extends ElementType {
             System.out.println("No se pudo colocar el cono sin superposición tras " + intentosMaximos + " intentos.");
         }
     }
+    /**
+    * Dibuja la imagen en el componente gráfico.
+    * Este método se ejecuta cada vez que se actualiza el componente visual,
+    *
+    */
     @Override
     public void update(Graphics g) {
         g.drawImage(imagenBuffer, 0, 0, this);
         //paint(g);
     }
-
+    /**
+    * Dibuja el sprite en su posición actual dentro del campo de juego.
+    *
+    * Este método se encarga de renderizar la imagen del sprite, utilizando su posición (X, Y) 
+    *
+    * @param g 
+    */
     @Override
     public void paint(Graphics g) {
         g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
-
+    /**
+    * Obtiene el valor actual del paso del sprite.
+    *
+    * El paso representa normalmente la cantidad de unidades (por ejemplo, píxeles)
+    * que el sprite avanza o se desplaza en cada actualización del juego.
+    *
+    * @return el valor del paso actual.
+    */
     public int getPaso() {
         return paso;
     }
-
+    /**
+    * Establece un nuevo valor para el paso del sprite.
+    *
+    * Permite modificar la distancia que el sprite se mueve en cada ciclo del juego,
+    * afectando su velocidad o ritmo de desplazamiento.
+    *
+    * @param paso
+    */
     public void setPaso(int paso) {
         this.paso = paso;
     }
-
+    /**
+    * Mueve el sprite en una dirección aleatoria dentro de los límites del contenedor.
+    *
+    * Este método elige una dirección al azar (arriba, abajo, izquierda o derecha)
+    * y calcula una nueva posición basada en el valor de "paso". Si la nueva posición
+    * se encuentra dentro de los límites del contenedor, actualiza las coordenadas
+    * del sprite y refresca el contenedor gráfico si está disponible.
+    *
+    * - Se verifica que la nueva posición no salga del contenedor usando `fueraContenedor(nx, ny)`.
+    * - Si es válida, actualiza x e y, y solicita un repintado del contenedor.
+    *
+    * @return 
+    */
     @Override
     public boolean mover() {
 

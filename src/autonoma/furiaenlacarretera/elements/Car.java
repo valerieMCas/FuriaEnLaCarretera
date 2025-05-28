@@ -69,7 +69,7 @@ public class Car extends ElementType {
     /**
     * Crea y posiciona un objeto de tipo car en el campo de juego.
     *
-    * Este método intenta colocar una nueva instancia de `Person` en una posición
+    * Este método intenta colocar una nueva instancia de `Car` en una posición
     * aleatoria dentro de los límites, evitando que se 
     * superponga con otros sprites que ya existen. Se realizan varios intentos hasta 
     * encontrar una ubicación libre o alcanzar un número máximo de intentos.
